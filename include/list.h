@@ -2,31 +2,127 @@
 #define LIST_H
 
 #include <exception>
+#include <string>
 
-template <typename T>
-class ListNode
-{
-    public:
-        T value;
-        ListNode<T> *next;
-};
+#include "listNode.h"
 
 template <typename T>
 class List 
 {
     private:
         ListNode<T>     *_nodes;
-        int             _lenght;
+        int             _length;
+
     public:
         List();
         ~List();
+        T           get(int index) const;   
+        int         length() const;
+        void        add(T val);
+        void        remove(int index);
+        T           to_array() const;
+        std::string to_string() const;
 
-        T       get(int index) const;   
-        int     lenght() const;
-        void    add(T val);
-        void    remove(int index);
+    struct IndexOutOfRange : public std::exception { virtual const char *what() const throw() { return ("Index out of range"); } };
+    struct EmptyList : public std::exception { virtual const char *what() const throw() { return ("List is empty"); } };
+};
 
-        struct IndexOutOfRange : public std::exception { virtual const char *what() const throw() { return ("Index out of range"); } };
- };
+template <typename T>
+List<T>::List()
+{
+    this->_length = 0;
+    this->_nodes = NULL;
+    return;
+}
+
+template <typename T>
+List<T>::~List()
+{
+    ListNode<T> *node;
+    ListNode<T> *temp;
+
+    if (this->_length == 0) { return; }
+    node = this->_nodes;
+    while (node != NULL)
+    {
+        temp = node->next;
+        delete node;
+        node = temp;
+    }
+    return;
+}
+
+template <typename T>
+T List<T>::get(int index) const
+{
+    ListNode<T> *node;
+
+    if (index < 0) { throw List::IndexOutOfRange(); }
+    if (index >= this->_length) { throw List::IndexOutOfRange(); }
+    node = this->_nodes;
+    while (index > 0)
+    {
+        node = node->next;
+        index--;
+    }
+    return (node->value);
+}
+
+template <typename T>
+int List<T>::length() const { return (this->_length); }
+
+template <typename T>
+void List<T>::add(T val)
+{
+    ListNode<T> *node;
+
+    node = new ListNode<T>();
+    node->value = val;
+    node->next = this->_nodes;
+    this->_nodes = node;
+    this->_length++;
+}
+
+template <typename T>
+void List<T>::remove(int index)
+{
+    ListNode<T> *node;
+    ListNode<T> *prev;
+
+    if (index < 0) { throw List::IndexOutOfRange(); }
+    if (this->_length <= index) { throw List::IndexOutOfRange(); }
+    if (index == 0)
+    {
+        node = this->_nodes;
+        this->_nodes = node->next;
+        this->_length--;
+        delete node;
+        return;
+    }
+    prev = NULL;
+    node = this->_nodes;
+    while (index > 0)
+    {
+        prev = node;
+        node = node->next;
+        index--;
+    }
+    prev->next = node->next;
+    this->_length--;
+    delete node;
+}
+
+template <typename T>
+std::string List<T>::to_string() const
+{
+    std::string str;
+
+    if (this->_length <= 0) { return (str); }
+    for (int i = 0; i < this->_length; i++)
+    {
+        str += std::to_string(this->get(i)) + "\n";
+    }
+    return (str);
+}
 
 #endif
