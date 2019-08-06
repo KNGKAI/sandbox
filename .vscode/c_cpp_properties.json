@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/**/*",
-                "${workspaceFolder}/include/*"
+                "${workspaceFolder}/include/*",
+                "~/.brew/Cellar/glfw/3.3/include/"
             ],
             "defines": [],
             "macFrameworkPath": [

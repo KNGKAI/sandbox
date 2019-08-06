@@ -1,17 +1,19 @@
-#ifndef TRANFORM_H
-#define TRANFORM_H
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
 
 #include <string>
 
 #include "object.h"
 #include "vector3.h"
 
-class Tranform : public Object
+class Transform : public Object
 {
     public:
-        Tranform() { return; }
-        ~Tranform() { return; }
+        Transform() { return; }
+        ~Transform() { return; }
         Vector3     position;
+        Vector3     rotation;
+        Vector3     scale;
 };
 
 #endif

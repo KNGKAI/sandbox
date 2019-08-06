@@ -3,7 +3,13 @@
 
 struct Vector3
 {
-    double x, y, z;
+    public:
+        Vector3() {return;}
+        Vector3(double x, double y, double z) : x(x), y(y), z(z) { return; }
+        ~Vector3() {return;}
+        double x;
+        double y;
+        double z;
 };
 
 #endif

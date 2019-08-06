@@ -5,7 +5,10 @@ TARGET = $(TARGET_DIR)$(NAME)
 
 
 COMPILER = clang++
-FLAGS = -w -Werror -Wextra -Wall -I include
+FLAGS = -w -Werror -Wextra -Wall -framework Opengl
+
+DEP_DIR = ~/.brew/Cellar/glfw/3.3
+DEP = -I include -I $(DEP_DIR)/include/ $(DEP_DIR)/lib/libglfw.3.3.dylib -framework OpenGL
 
 SRC = src/*.cpp
 OBJ = obj/*.o
@@ -15,12 +18,12 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	@echo "COMPILING MAIN"
 	@mkdir -p bin
-	@$(COMPILER) -w main.cpp -o $(TARGET) $(OBJ) $(FLAGS)
+	@$(COMPILER) -w main.cpp -o $(TARGET) $(OBJ) $(FLAGS) $(DEP)
 	@echo "DONE"
 
 $(OBJ):
 	@echo "COMPILING OBJECTS"
-	@$(COMPILER) -w -c $(SRC) $(FLAGS)
+	@$(COMPILER) -w -c $(SRC) $(FLAGS) $(DEP)
 	@mkdir -p obj
 	@mv *.o ./obj
 	@echo "DONE"
