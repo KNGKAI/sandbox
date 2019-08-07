@@ -7,8 +7,18 @@ TARGET = $(TARGET_DIR)$(NAME)
 COMPILER = clang++
 FLAGS = -w -Werror -Wextra -Wall -framework Opengl
 
-DEP_DIR = ~/.brew/Cellar/glfw/3.3
-DEP = -I include -I $(DEP_DIR)/include/ $(DEP_DIR)/lib/libglfw.3.3.dylib -framework OpenGL
+DEP_DIR = ~/.brew/Cellar
+OPENGL_DEP = -framework OpenGL
+GLEW_DEP = $(DEP_DIR)/glew/2.1.0/lib/libGLEW.2.1.0.dylib
+GLFW_DEP = $(DEP_DIR)/glfw/3.3/lib/libglfw.3.3.dylib
+IMGUI_DEP = ./lib/gui/imgui*.cpp #.dynlib
+
+DEP = $(OPENGL_DEP) $(GLEW_DEP) $(GLFW_DEP) $(IMGUI_DEP)
+
+GLEW_INC = -I $(DEP_DIR)/glew/2.1.0/include
+GLFW_INC = -I $(DEP_DIR)/glfw/3.3/include/
+IMGUI_INC = -I ./lib/gui/
+INC = -I include $(GLEW_INC) $(GLFW_INC) $(IMGUI_INC)
 
 SRC = src/*.cpp
 OBJ = obj/*.o
@@ -18,12 +28,12 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	@echo "COMPILING MAIN"
 	@mkdir -p bin
-	@$(COMPILER) -w main.cpp -o $(TARGET) $(OBJ) $(FLAGS) $(DEP)
+	@$(COMPILER) -w main.cpp -o $(TARGET) $(OBJ) $(FLAGS) $(INC) $(DEP)
 	@echo "DONE"
 
 $(OBJ):
 	@echo "COMPILING OBJECTS"
-	@$(COMPILER) -w -c $(SRC) $(FLAGS) $(DEP)
+	@$(COMPILER) -w -c $(SRC) $(FLAGS) $(INC)
 	@mkdir -p obj
 	@mv *.o ./obj
 	@echo "DONE"
@@ -50,3 +60,4 @@ SH = curl -fsSL https://raw.githubusercontent.com/Tolsadus/42homebrewfix/master/
 install:
 	sh -c "$(SH)"
 	brew install glfw
+	brew install glew
