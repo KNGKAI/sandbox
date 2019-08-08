@@ -7,7 +7,8 @@ TARGET = $(TARGET_DIR)$(NAME)
 COMPILER = clang++
 FLAGS = -w -Werror -Wextra -Wall -framework Opengl
 
-DEP_DIR = ~/.brew/Cellar
+#DEP_DIR = ~/.brew/Cellar
+DEP_DIR = ./lib
 OPENGL_DEP = -framework OpenGL
 GLEW_DEP = $(DEP_DIR)/glew/2.1.0/lib/libGLEW.2.1.0.dylib
 GLFW_DEP = $(DEP_DIR)/glfw/3.3/lib/libglfw.3.3.dylib
