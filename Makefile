@@ -4,20 +4,21 @@ TARGET_DIR = ./bin/
 TARGET = $(TARGET_DIR)$(NAME)
 
 
-COMPILER = clang++
-FLAGS = -w -Werror -Wextra -Wall -framework Opengl
+COMPILER = clang++.exe
+FLAGS = -w -Werror -Wextra -Wall
 
 #DEP_DIR = ~/.brew/Cellar
 DEP_DIR = ./lib
+
 OPENGL_DEP = -framework OpenGL
-GLEW_DEP = $(DEP_DIR)/glew/2.1.0/lib/libGLEW.2.1.0.dylib
-GLFW_DEP = $(DEP_DIR)/glfw/3.3/lib/libglfw.3.3.dylib
+GLEW_DEP = $(DEP_DIR)/graphics/glew/lib/Release/Win32/glew32.lib
+GLFW_DEP = $(DEP_DIR)/graphics/glfw/lib/glfw3.lib
 IMGUI_DEP = ./lib/gui/imgui*.cpp #.dynlib
 
 DEP = $(OPENGL_DEP) $(GLEW_DEP) $(GLFW_DEP) $(IMGUI_DEP)
 
-GLEW_INC = -I $(DEP_DIR)/glew/2.1.0/include
-GLFW_INC = -I $(DEP_DIR)/glfw/3.3/include/
+GLEW_INC = -I $(DEP_DIR)/graphics/glew/include/
+GLFW_INC = -I $(DEP_DIR)/graphics/glfw/include/
 IMGUI_INC = -I ./lib/gui/
 INC = -I include $(GLEW_INC) $(GLFW_INC) $(IMGUI_INC)
 
@@ -28,26 +29,26 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "COMPILING MAIN"
-	@mkdir -p bin
-	@$(COMPILER) -w main.cpp -o $(TARGET) $(OBJ) $(FLAGS) $(INC) $(DEP)
+	mkdir -p bin
+	$(COMPILER) -w main.cpp -o $(TARGET) $(OBJ) $(FLAGS) $(INC) $(DEP)
 	@echo "DONE"
 
 $(OBJ):
 	@echo "COMPILING OBJECTS"
-	@$(COMPILER) -w -c $(SRC) $(FLAGS) $(INC)
-	@mkdir -p obj
-	@mv *.o ./obj
+	$(COMPILER) -w -c $(SRC) $(FLAGS) $(INC)
+	mkdir -p obj
+	mv *.o ./obj
 	@echo "DONE"
 
 clean:
 	@echo "CLEAN"
-	@rm -f $(OBJ)
-	@rm -rf ./obj
+	rm -f $(OBJ)
+	rm -rf ./obj
 
 fclean: clean
 	@echo "FULL CLEAN"
-	@rm -f $(TARGET)
-	@rm -rf ./bin
+	rm -f $(TARGET)
+	rm -rf ./bin
 
 re: fclean all
 
