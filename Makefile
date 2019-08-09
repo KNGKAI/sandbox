@@ -12,13 +12,15 @@ OPENGL_DEP = -framework OpenGL
 GLEW_DEP = $(DEP_DIR)/glew/2.1.0/lib/libGLEW.2.1.0.dylib
 GLFW_DEP = $(DEP_DIR)/glfw/3.3/lib/libglfw.3.3.dylib
 IMGUI_DEP = ./lib/gui/imgui*.cpp #.dynlib
+JSON_DEP = ./lib/json/jsoncpp.cpp
 
-DEP = $(OPENGL_DEP) $(GLEW_DEP) $(GLFW_DEP) $(IMGUI_DEP)
+DEP = $(OPENGL_DEP) $(GLEW_DEP) $(GLFW_DEP) $(IMGUI_DEP) $(JSON_DEP)
 
 GLEW_INC = -I $(DEP_DIR)/glew/2.1.0/include
 GLFW_INC = -I $(DEP_DIR)/glfw/3.3/include/
 IMGUI_INC = -I ./lib/gui/
-INC = -I include $(GLEW_INC) $(GLFW_INC) $(IMGUI_INC)
+JSON_INC = -I ./lib/json/include
+INC = -I include $(GLEW_INC) $(GLFW_INC) $(IMGUI_INC) $(JSON_INC)
 
 SRC = src/*.cpp
 OBJ = obj/*.o

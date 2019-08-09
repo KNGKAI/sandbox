@@ -1,9 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "transform.h"
+#include "vector3.h"
 
-class Camera : public Transform
+class Camera
 {
     public:
         Camera() 
@@ -14,6 +14,5 @@ class Camera : public Transform
         ~Camera() { return; }
         Vector3 surface;
 };
-
 
 #endif

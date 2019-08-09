@@ -9,12 +9,14 @@
 
 #include "camera.h"
 #include "mesh.h"
+#include "scene.h"
 
 class Sandbox
 {
     private:
-        Camera      camera;
-        GLFWwindow* window;
+        GLFWwindow* _window;
+        Scene       *_scene;
+
         double      _deltaTime;
 
         void    input();
@@ -22,6 +24,7 @@ class Sandbox
         void    renderBackground();
         void    renderMesh(Mesh m);
         void    renderGUI();
+        void    renderDebug();
 
     public:
         Sandbox();
@@ -29,7 +32,7 @@ class Sandbox
 
         void    openWindow();
         void    closeWindow();
-        void    render();
+        void    process(Scene *scene);
 
         double      time();
         double      deltaTime();

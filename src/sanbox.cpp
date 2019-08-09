@@ -16,15 +16,7 @@ Sandbox::~Sandbox()
 
 void Sandbox::input()
 {
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) { }
-    else if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) { }
-    else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) { }
-    else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) { }
-    else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) { }
-    else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) { }
-    else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) { }
-    else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) { }
-    else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) { }
+    if (glfwGetKey(this->_window, GLFW_KEY_ESCAPE) == GLFW_PRESS) { std::exit(0); }
 }
 
 void Sandbox::renderClear()
@@ -45,17 +37,39 @@ void Sandbox::renderBackground()
 
 void Sandbox::renderGUI()
 {
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-
-    bool b = false;
-    ImGui::Begin("Debug", &b);
-    ImGui::Text(("Delta Time: " + std::to_string(this->deltaTime())).c_str());
-    ImGui::End();
-
+    this->renderDebug();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Sandbox::renderDebug()
+{
+    bool a = false;
+    std::string type;
+
+    ImGui::Begin("Debug", &a);
+    ImGui::Text(("FPS: " + std::to_string((int)(1 / this->deltaTime()))).c_str());
+    ImGui::Text(("Delta Time: " + std::to_string(this->deltaTime())).c_str());
+    ImGui::Text("-----");
+    ImGui::Text("Scene");
+    ImGui::Text(("\tName: " + this->_scene->name()).c_str());
+    ImGui::Text("\tObjects:");
+    for (int i = 0; i < this->_scene->objects()->length(); i++)
+    {
+        type = "-unknown-";
+        switch (this->_scene->objects()->get(i).type())
+        {
+            case T_Object: type = "Object"; break;
+            case T_Transform: type = "Tranform"; break;
+            case T_Mesh: type = "Mesh"; break;
+        }
+        ImGui::Text(("\t\t" + type + " name: " + this->_scene->objects()->get(i).name()).c_str());
+    }
+    ImGui::End();
 }
 
 void Sandbox::openWindow()
@@ -80,43 +94,43 @@ void Sandbox::openWindow()
     //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
-    this->window = glfwCreateWindow(1280, 720, "Sandbox", NULL, NULL);
-    if (!window)
+    this->_window = glfwCreateWindow(1280, 720, "Sandbox", NULL, NULL);
+    if (!this->_window)
     {
         this->closeWindow();
         std::cout << "GLFW window error" << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    glfwMakeContextCurrent(this->window);
-    glewInit();
-    
+    glfwMakeContextCurrent(this->_window);
+    glewInit();    
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(this->window, true);
+    ImGui_ImplGlfw_InitForOpenGL(this->_window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
 void Sandbox::closeWindow()
 {
-    glfwDestroyWindow(this->window);
+    glfwDestroyWindow(this->_window);
     glfwTerminate();
-
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
 
-void Sandbox::render()
+void Sandbox::process(Scene *scene)
 {
     double t;
 
     t = this->time();
     glfwPollEvents();
+    this->_scene = scene;
+    this->input();
     this->renderClear();
     this->renderBackground();
     this->renderGUI();
     glFlush();
-    glfwSwapBuffers(this->window);
+    glfwSwapBuffers(this->_window);
     this->_deltaTime = this->time() - t;
 }
 

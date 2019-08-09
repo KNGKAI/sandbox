@@ -4,7 +4,12 @@
 #include <exception>
 #include <string>
 
-#include "listNode.h"
+template <typename T>
+struct ListNode
+{
+    T value;
+    ListNode<T> *next;
+};
 
 template <typename T>
 class List 
