@@ -16,9 +16,10 @@ class Render
     private:
         static GLFWwindow*  _window;
 
-        static void    input();
-        static void    renderGUI();
-        static void    renderDebug();
+        static void     input();
+        static void     renderScene();
+        static void     renderGUI();
+        static void     renderDebug();
 
     public:
         Render();

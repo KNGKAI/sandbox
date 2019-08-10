@@ -12,6 +12,7 @@ class Sandbox
     private:
         static Scene*       _scene;
 
+        static double       _t;
         static double       _deltaTime;
         static bool         _running;
 

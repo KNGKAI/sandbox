@@ -17,6 +17,16 @@ void Render::input()
     if (glfwGetKey(Render::window(), GLFW_KEY_RIGHT) == GLFW_PRESS) { Input::press(Key_Right); }
 }
 
+void Render::renderScene()
+{
+    glColor3f(0, 0, 0);
+    glBegin(GL_POLYGON);
+    glVertex2f(-1.0, -1.0);
+    glVertex2f(1.0, -1.0);
+    glVertex2f(-1.0, 1.0);
+    glEnd();
+}
+
 void Render::renderGUI()
 {
     ImGui_ImplOpenGL3_NewFrame();
@@ -51,10 +61,7 @@ void Render::renderDebug()
         ImGui::Text(("\t\t" + type + " name: " + Sandbox::scene()->objects()->get(i).name()).c_str());
     }
     std::string keys = "Keys: ";
-    for (int j = 0; j < Input::keys()->length(); j++)
-    {
-        keys += std::to_string(Input::keys()->get(j)->val) + " (" + std::to_string(Input::keys()->get(j)->state) + "), ";
-    }
+    for (int j = 0; j < Input::keys()->length(); j++) { keys += std::to_string(Input::keys()->get(j)->val) + " (" + std::to_string(Input::keys()->get(j)->state) + "), "; }
     ImGui::Text(keys.c_str());
     ImGui::End();
 }
@@ -96,11 +103,12 @@ void Render::init()
 
 void Render::render()
 {
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    glfwPollEvents();
     Render::input();
+    Render::renderScene();
     Render::renderGUI();
-    glFlush();
+    glfwPollEvents();
     glfwSwapBuffers(Render::window());
 }
 
@@ -113,7 +121,4 @@ void Render::destroy()
     ImGui::DestroyContext();
 }
 
-GLFWwindow *Render::window()
-{
-    return (Render::_window);
-}
+GLFWwindow *Render::window() { return (Render::_window); }

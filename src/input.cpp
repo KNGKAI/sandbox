@@ -12,10 +12,7 @@ void Input::press(EKeycode key)
     {
         if (_keys->get(i)->val == key)
         {
-            if (_keys->get(i)->state == Key_State_Up)
-            {
-            _keys->get(i)->setState(Key_State_Hold);
-            }
+            if (_keys->get(i)->state == Key_State_Up) { _keys->get(i)->setState(Key_State_Hold); }
             return;
         }
     }
@@ -26,18 +23,9 @@ void Input::process()
 {
     for (int i = _keys->length() - 1; i >= 0; i--)
     {
-        if (_keys->get(i)->state == Key_State_Down)
-        {
-            _keys->get(i)->setState(Key_State_Hold);
-        }
-        else if (_keys->get(i)->state == Key_State_Hold)
-        {
-            _keys->get(i)->setState(Key_State_Up);
-        }
-        else if (_keys->get(i)->state == Key_State_Up)
-        {
-            _keys->remove(i);
-        }
+        if (_keys->get(i)->state == Key_State_Down) { _keys->get(i)->setState(Key_State_Hold); }
+        else if (_keys->get(i)->state == Key_State_Hold) { _keys->get(i)->setState(Key_State_Up); }
+        else if (_keys->get(i)->state == Key_State_Up) { _keys->remove(i); }
     }
 }
 
@@ -47,16 +35,10 @@ bool Input::getKey(EKeycode key, EKeycodeState state)
     {
         if (_keys->get(i)->val == key)
         {
-            if (_keys->get(i)->state == state)
-            {
-                return (true);
-            }
+            if (_keys->get(i)->state == state) { return (true); }
         }
     }
     return (false);
 }
 
-List<Key*> *Input::keys()
-{
-    return (Input::_keys);
-}
+List<Key*> *Input::keys() { return (Input::_keys); }

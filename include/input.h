@@ -27,7 +27,7 @@ struct Key
     Key() { return; }
     Key(EKeycode val, EKeycodeState state) : val(val), state(state) { return; }
     ~Key() { return; }
-    
+
     void setState(EKeycodeState s) { this->state = s; }
 };
 
@@ -41,7 +41,7 @@ class Input
         static void         press(EKeycode key);
         static void         process();
         static bool         getKey(EKeycode key, EKeycodeState state);
-        static List<Key*>*   keys();
+        static List<Key*>*  keys();
 };
 
 #endif
