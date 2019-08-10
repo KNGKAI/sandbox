@@ -21,10 +21,12 @@ class List
     public:
         List();
         ~List();
-        T           get(int index) const;   
+        T           get(int index);   
         int         length() const;
         void        add(T val);
         void        remove(int index);
+        bool        contains(T val);
+        void        clear();
         T           to_array() const;
         std::string to_string() const;
 
@@ -58,7 +60,7 @@ List<T>::~List()
 }
 
 template <typename T>
-T List<T>::get(int index) const
+T List<T>::get(int index)
 {
     ListNode<T> *node;
 
@@ -115,6 +117,25 @@ void List<T>::remove(int index)
     prev->next = node->next;
     this->_length--;
     delete node;
+}
+
+template <typename T>
+bool List<T>::contains(T val)
+{
+    for (int i = 0; i < this->length(); i++)
+    {
+        if (this->get(i) == val) { return (true); }
+    }
+    return (false);
+}
+
+template <typename T>
+void List<T>::clear()
+{
+    while (this->length() > 0)
+    {
+        this->remove(this->length() - 1);
+    }
 }
 
 template <typename T>

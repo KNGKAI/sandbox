@@ -1,42 +1,33 @@
 #ifndef SANDBOX_H
 #define SANDBOX_H
 
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-
 #include "camera.h"
 #include "mesh.h"
 #include "scene.h"
+#include "render.h"
+#include "input.h"
 
 class Sandbox
 {
     private:
-        GLFWwindow* _window;
-        Scene       *_scene;
+        static Scene*       _scene;
 
-        double      _deltaTime;
-
-        void    input();
-        void    renderClear();
-        void    renderBackground();
-        void    renderMesh(Mesh m);
-        void    renderGUI();
-        void    renderDebug();
+        static double       _deltaTime;
+        static bool         _running;
 
     public:
         Sandbox();
         ~Sandbox();
 
-        void    openWindow();
-        void    closeWindow();
-        void    process(Scene *scene);
+        static void     init();
+        static void     process(Scene *scene);
+        static void     destroy();
 
-        double      time();
-        double      deltaTime();
+        static bool         running();
+        static double       time();
+        static double       deltaTime();
+
+        static Scene*       scene();
 };
-
 
 #endif

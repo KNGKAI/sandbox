@@ -3,15 +3,14 @@
 #include "sandbox.h"
 #include "scene.h"
 
-Sandbox sandbox;
-
 int main(int ac, char ** av)
 {
     Scene scene("scene/scene.json");
     
-    while (true)
+    Sandbox::init();
+    while (Sandbox::running())
     {
-        sandbox.process(&scene);
+        Sandbox::process(&scene);
     }
     return (0);
 }
