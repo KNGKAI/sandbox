@@ -3,20 +3,21 @@
 
 #include <fstream>
 #include <iostream>
-#include <string.h>
 #include "json/json.h"
 
-#include "camera.h"
+#include "ientity.h"
 #include "list.h"
-#include "transform.h"
 #include "object.h"
+#include "mesh.h"
+#include "transform.h"
 
 class Scene
 {
     private:
-        std::string     _name;
-        Camera          _camera;
-        List<Object>    *_objects;
+        std::string         _name;
+        Camera              _camera;
+        List<IEntity *>*    _objects;
+
     public:
         Scene() { return; }
         Scene(std::string path)
@@ -30,12 +31,10 @@ class Scene
             reader.parse(ifs, file);
             objects = file["objects"];
             this->_name = file["name"].asString();
-            this->_objects = new List<Object>();
+            this->_objects = new List<IEntity *>();
             for (int i = 0; i < objects.size(); i++)
             {
-                if (objects[i]["type"].asString() == "object") { this->_objects->add(Object(objects[i]["name"].asString())); }
-                if (objects[i]["type"].asString() == "transform") { this->_objects->add(Transform(objects[i]["name"].asString())); }
-                if (objects[i]["type"].asString() == "mesh") { this->_objects->add(Mesh(objects[i]["name"].asString())); }
+                if (objects[i]["type"].asString() == "object") { this->_objects->add(new Object(objects[i]["name"].asString())); }
                 std:: cout << objects[i]["name"].asString() << " (" << objects[i]["type"].asString() << ") was added to scece" << std::endl;
             }
             return;
@@ -48,7 +47,7 @@ class Scene
         {
             return (this->_name);
         }
-        List<Object>    *objects()
+        List<IEntity *>    *objects()
         {
             return (this->_objects);
         }

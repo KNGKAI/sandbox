@@ -11,7 +11,7 @@
 #include "mesh.h"
 #include "scene.h"
 
-class Render
+class Renderer
 {
     private:
         static GLFWwindow*  _window;
@@ -22,15 +22,11 @@ class Render
         static void     renderDebug();
 
     public:
-        Render();
-        ~Render();
-
         static void     init();
         static void     render();
         static void     destroy();
 
         static GLFWwindow*  window();
-        static Scene*       scene();
 };
 
 #endif

@@ -5,6 +5,7 @@
         {"name": "object_1", "type": "object"},
         {"name": "object_2", "type": "transform"},
         {"name": "object_3", "type": "mesh"},
-        {"name": "object_4", "type": "object"}
+        {"name": "object_4", "type": "object"},
+        {"name": "object_5", "type": "mesh"}
     ]
 }

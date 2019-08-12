@@ -36,8 +36,6 @@ class Input
     private:
         static List<Key*>*   _keys;
     public:
-        Input();
-        ~Input();
         static void         press(EKeycode key);
         static void         process();
         static bool         getKey(EKeycode key, EKeycodeState state);

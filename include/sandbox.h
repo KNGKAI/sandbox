@@ -4,22 +4,23 @@
 #include "camera.h"
 #include "mesh.h"
 #include "scene.h"
-#include "render.h"
+#include "renderer.h"
 #include "input.h"
+#include "transform.h"
+#include "object.h"
+#include "vector3.h"
+#include "list.h"
+#include "ientity.h"
 
 class Sandbox
 {
     private:
         static Scene*       _scene;
 
-        static double       _t;
         static double       _deltaTime;
         static bool         _running;
 
     public:
-        Sandbox();
-        ~Sandbox();
-
         static void     init();
         static void     process(Scene *scene);
         static void     destroy();

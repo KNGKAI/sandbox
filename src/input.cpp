@@ -1,9 +1,5 @@
 #include "input.h"
 
-Input::Input() { return; }
-
-Input::~Input() { return; }
-
 List<Key*> *Input::_keys = new List<Key*>();
 
 void Input::press(EKeycode key)

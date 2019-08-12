@@ -1,23 +1,18 @@
-#include <iostream>
-#include "render.h"
+#include "renderer.h"
 #include "sandbox.h"
 
-Render::Render() { return; }
+GLFWwindow *Renderer::_window = nullptr;
 
-Render::~Render() { return; }
-
-GLFWwindow *Render::_window = nullptr;
-
-void Render::input()
+void Renderer::input()
 {
-    if (glfwGetKey(Render::window(), GLFW_KEY_ESCAPE) == GLFW_PRESS) { std::exit(0); }
-    if (glfwGetKey(Render::window(), GLFW_KEY_UP) == GLFW_PRESS) { Input::press(Key_Up); }
-    if (glfwGetKey(Render::window(), GLFW_KEY_DOWN) == GLFW_PRESS) { Input::press(Key_Down); }
-    if (glfwGetKey(Render::window(), GLFW_KEY_LEFT) == GLFW_PRESS) { Input::press(Key_Left); }
-    if (glfwGetKey(Render::window(), GLFW_KEY_RIGHT) == GLFW_PRESS) { Input::press(Key_Right); }
+    if (glfwGetKey(Renderer::window(), GLFW_KEY_ESCAPE) == GLFW_PRESS) { std::exit(0); }
+    if (glfwGetKey(Renderer::window(), GLFW_KEY_UP) == GLFW_PRESS) { Input::press(Key_Up); }
+    if (glfwGetKey(Renderer::window(), GLFW_KEY_DOWN) == GLFW_PRESS) { Input::press(Key_Down); }
+    if (glfwGetKey(Renderer::window(), GLFW_KEY_LEFT) == GLFW_PRESS) { Input::press(Key_Left); }
+    if (glfwGetKey(Renderer::window(), GLFW_KEY_RIGHT) == GLFW_PRESS) { Input::press(Key_Right); }
 }
 
-void Render::renderScene()
+void Renderer::renderScene()
 {
     glColor3f(0, 0, 0);
     glBegin(GL_POLYGON);
@@ -27,17 +22,17 @@ void Render::renderScene()
     glEnd();
 }
 
-void Render::renderGUI()
+void Renderer::renderGUI()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    Render::renderDebug();
+    Renderer::renderDebug();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void Render::renderDebug()
+void Renderer::renderDebug()
 {
     bool a = false;
     std::string type;
@@ -49,24 +44,14 @@ void Render::renderDebug()
     ImGui::Text("Scene");
     ImGui::Text(("\tName: " + Sandbox::scene()->name()).c_str());
     ImGui::Text("\tObjects:");
-    for (int i = 0; i < Sandbox::scene()->objects()->length(); i++)
-    {
-        type = "-unknown-";
-        switch (Sandbox::scene()->objects()->get(i).type())
-        {
-            case T_Object: type = "Object"; break;
-            case T_Transform: type = "Tranform"; break;
-            case T_Mesh: type = "Mesh"; break;
-        }
-        ImGui::Text(("\t\t" + type + " name: " + Sandbox::scene()->objects()->get(i).name()).c_str());
-    }
+    for (int i = 0; i < Sandbox::scene()->objects()->length(); i++) { ImGui::Text(("\t\t" + Sandbox::scene()->objects()->get(i)->name()).c_str()); }
     std::string keys = "Keys: ";
     for (int j = 0; j < Input::keys()->length(); j++) { keys += std::to_string(Input::keys()->get(j)->val) + " (" + std::to_string(Input::keys()->get(j)->state) + "), "; }
     ImGui::Text(keys.c_str());
     ImGui::End();
 }
 
-void Render::init()
+void Renderer::init()
 {
     if (!glfwInit())
     {
@@ -86,39 +71,39 @@ void Render::init()
     //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
-    Render::_window = glfwCreateWindow(1280, 720, "Sandbox", NULL, NULL);
-    if (!Render::window())
+    Renderer::_window = glfwCreateWindow(1280, 720, "Sandbox", NULL, NULL);
+    if (!Renderer::window())
     {
-        Render::destroy();
+        Renderer::destroy();
         std::cout << "GLFW window error" << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    glfwMakeContextCurrent(Render::window());
+    glfwMakeContextCurrent(Renderer::window());
     glewInit();    
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(Render::window(), true);
+    ImGui_ImplGlfw_InitForOpenGL(Renderer::window(), true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
-void Render::render()
+void Renderer::render()
 {
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    Render::input();
-    Render::renderScene();
-    Render::renderGUI();
+    Renderer::input();
+    Renderer::renderScene();
+    Renderer::renderGUI();
     glfwPollEvents();
-    glfwSwapBuffers(Render::window());
+    glfwSwapBuffers(Renderer::window());
 }
 
-void Render::destroy()
+void Renderer::destroy()
 {
-    glfwDestroyWindow(Render::window());
+    glfwDestroyWindow(Renderer::window());
     glfwTerminate();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
 
-GLFWwindow *Render::window() { return (Render::_window); }
+GLFWwindow *Renderer::window() { return (Renderer::_window); }
