@@ -3,6 +3,8 @@
 
 #include <string>
 #include "transform.h"
+#include "mesh.h"
+#include "rigidbody.h"
 
 enum EntityType
 {
@@ -17,6 +19,8 @@ class IEntity
         std::string     _name;
     public:
         Transform       transform;
+		Rigidbody		rigidbody;
+//		Mesh			mesh;
         std::string     name() { return(_name); }
         
         virtual void            start() { return; }

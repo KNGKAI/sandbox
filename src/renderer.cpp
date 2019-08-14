@@ -42,9 +42,19 @@ void Renderer::renderDebug()
     ImGui::Text(("Delta Time: " + std::to_string(Sandbox::deltaTime())).c_str());
     ImGui::Text("-----");
     ImGui::Text("Scene");
-    ImGui::Text(("\tName: " + Sandbox::scene()->name()).c_str());
-    ImGui::Text("\tObjects:");
-    for (int i = 0; i < Sandbox::scene()->objects()->length(); i++) { ImGui::Text(("\t\t" + Sandbox::scene()->objects()->get(i)->name()).c_str()); }
+	ImGui::Text(("\tName: " + Sandbox::scene()->name()).c_str());
+	ImGui::Text(( "\tCamera:\n\t\t pos x:" + std::to_string(Camera::transform.position.x) + "pos y : " + std::to_string(Camera::transform.position.y) + " pos z : " + std::to_string(Camera::transform.position.z) + "\n\t\trot x:" + std::to_string(Camera::transform.rotation.x) + " rot y : " + std::to_string(Camera::transform.rotation.y) + " rot z : " + std::to_string(Camera::transform.rotation.z)).c_str());
+    ImGui::Text("Objects:");
+	for (int i = 0; i < Sandbox::scene()->objects()->length(); i++)
+    {
+        IEntity *obj = Sandbox::scene()->objects()->get(i);
+        if (ImGui::BeginPopup(obj->name().c_str()))
+        {
+            ImGui::Text(("pos x:" + std::to_string(obj->transform.position.x) + ":y:" + std::to_string(obj->transform.position.y) + ":z:" + std::to_string(obj->transform.position.z)).c_str());
+            ImGui::Text(("rot x:" + std::to_string(obj->transform.rotation.x) + ":y:" + std::to_string(obj->transform.rotation.y) + ":z:" + std::to_string(obj->transform.rotation.z)).c_str());
+            ImGui::EndPopup();
+        }
+    }
     std::string keys = "Keys: ";
     for (int j = 0; j < Input::keys()->length(); j++) { keys += std::to_string(Input::keys()->get(j)->val) + " (" + std::to_string(Input::keys()->get(j)->state) + "), "; }
     ImGui::Text(keys.c_str());

@@ -4,6 +4,7 @@
 #include <string>
 
 #include "ientity.h"
+#include "vector3.h"
 #include "list.h"
 
 class Mesh

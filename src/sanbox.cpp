@@ -8,6 +8,8 @@ double Sandbox::_deltaTime = 0;
 
 bool Sandbox::_running = false;
 
+bool Sandbox::_pause = false;
+
 void Sandbox::init()
 {
     if (Sandbox::running()) { return; }
@@ -17,12 +19,22 @@ void Sandbox::init()
 
 void Sandbox::process(Scene *scene)
 {
-    float t;
+	IEntity *obj;
+    double t;
 
     if (!Sandbox::running()) { return; }
     t = Sandbox::time();
     Sandbox::_scene = scene;
     Input::process();
+	if (!Sandbox::paused())
+	{
+		Physics::process();
+		for (int i = 0; i < Sandbox::scene()->objects()->length(); i++)
+		{
+			obj = Sandbox::scene()->objects()->get(i);
+			obj->update();
+		}
+	}
     Renderer::render();
     Sandbox::_deltaTime = Sandbox::time() - t;
 }
@@ -34,7 +46,11 @@ void Sandbox::destroy()
     Renderer::destroy();
 }
 
+void Sandbox::togglePause() { Sandbox::_pause = !Sandbox::_pause; }
+
 bool Sandbox::running() { return (Sandbox::_running); }
+
+bool Sandbox::paused() { return (Sandbox::_pause); }
 
 double Sandbox::time() { return (Sandbox::running() ? glfwGetTime() : 0); }
 

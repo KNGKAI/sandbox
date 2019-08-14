@@ -11,6 +11,7 @@
 #include "vector3.h"
 #include "list.h"
 #include "ientity.h"
+#include "physics.h"
 
 class Sandbox
 {
@@ -18,14 +19,18 @@ class Sandbox
         static Scene*       _scene;
 
         static double       _deltaTime;
-        static bool         _running;
+		static bool         _running;
+		static bool         _pause;
 
     public:
         static void     init();
         static void     process(Scene *scene);
         static void     destroy();
 
+		static void		togglePause();
+
         static bool         running();
+		static bool			paused();
         static double       time();
         static double       deltaTime();
 
