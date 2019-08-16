@@ -21,13 +21,13 @@ class List
     public:
         List();
         ~List();
-        T           get(int index);   
+        T           get(int index) const;   
         int         length() const;
         void        add(T val);
         void        remove(int index);
         bool        contains(T val);
         void        clear();
-        T           to_array() const;
+        T*          to_array() const;
         std::string to_string() const;
 
     struct IndexOutOfRange : public std::exception { virtual const char *what() const throw() { return ("Index out of range"); } };
@@ -60,7 +60,7 @@ List<T>::~List()
 }
 
 template <typename T>
-T List<T>::get(int index)
+T List<T>::get(int index) const
 {
     ListNode<T> *node;
 
@@ -136,6 +136,19 @@ void List<T>::clear()
     {
         this->remove(this->length() - 1);
     }
+}
+
+template <typename T>
+T *List<T>::to_array() const
+{
+	T *a = new T[this->_length];
+
+	for (int i = 0; i < this->_length; i++)
+	{
+		T b = this->get(i);
+		a[i] = b;
+	}
+	return (a);
 }
 
 template <typename T>

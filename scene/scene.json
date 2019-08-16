@@ -1,28 +1,15 @@
 {
 	"name": "test scene",
 	"camera": {
-		"position": [ 0, 0, -10 ],
+		"position": [ 0, 2, -10 ],
 		"rotation": [ 0, 0, 0 ],
+		"surface": [ 0, 0, 1 ],
 		"fov": 90
 	},
 	"objects": [
 		{
-
-		},
-		{
-			"name": "object_1"
-		},
-		{
-			"name": "secondObject",
-			"position": [ 2, 3, 5 ]
-		},
-		{
-			"name": "rigid_object",
-			"rigidbody":
-			{
-				"mass": 1,
-				"useGravity": true
-			}
+			"name": "test_object",
+			"position": [ 0, 0, 0 ]
 		}
 	]
 }

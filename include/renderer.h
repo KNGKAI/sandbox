@@ -20,6 +20,9 @@ class Renderer
         static void     renderScene();
         static void     renderGUI();
         static void     renderDebug();
+        static int          compileShader(const std::string &src, unsigned int type);
+        static unsigned int createShader(const std::string &vertexShader, const std::string &fragShader);
+        static std::string  loadShader(const std::string path);
 
     public:
         static void     init();

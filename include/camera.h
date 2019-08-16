@@ -3,7 +3,6 @@
 
 #include "icomponent.h"
 #include "transform.h"
-#include "vector3.h"
 
 class Camera
 {

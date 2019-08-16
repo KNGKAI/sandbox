@@ -2,7 +2,7 @@
 
 Transform Camera::transform = Transform();
 
-Vector3 Camera::surface = Vector3(1, 1, 1);
+Vector3 Camera::surface = Vector3(0 , 0, 1);
 
 double Camera::fov = 0;
 

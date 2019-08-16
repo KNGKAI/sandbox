@@ -49,7 +49,8 @@ void Scene::setCamera(Json::Value camera)
 		return;
 	}
 	Camera::transform.position = Vector3(camera["position"][0].asDouble(), camera["position"][1].asDouble(), camera["position"][2].asDouble());
-	Camera::transform.position = Vector3(camera["rotation"][0].asDouble(), camera["rotation"][1].asDouble(), camera["rotation"][2].asDouble());
+	Camera::transform.rotation = Vector3(camera["rotation"][0].asDouble(), camera["rotation"][1].asDouble(), camera["rotation"][2].asDouble());
+	Camera::surface = Vector3(camera["surface"][0].asDouble(), camera["surface"][1].asDouble(), camera["surface"][2].asDouble());
 	Camera::fov = camera["fov"].asDouble();
 }
 

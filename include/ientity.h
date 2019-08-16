@@ -20,7 +20,7 @@ class IEntity
     public:
         Transform       transform;
 		Rigidbody		rigidbody;
-//		Mesh			mesh;
+		Mesh			mesh;
         std::string     name() { return(_name); }
         
         virtual void            start() { return; }

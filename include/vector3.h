@@ -1,6 +1,9 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
+#include <math.h>
+//#include <corecrt_math_defines.h>
+
 struct Vector3
 {
     public:
@@ -12,31 +15,24 @@ struct Vector3
         double y;
         double z;
 
-		Vector3 operator+(const Vector3 &rhs) const { return Vector3(this->x + rhs.x, this->y + rhs.y, this->z + rhs.z); }
-		Vector3 operator-(const Vector3 &rhs) const { return Vector3(this->x - rhs.x, this->y - rhs.y, this->z - rhs.z); }
-		Vector3 operator*(const Vector3 &rhs) const { return Vector3(this->x * rhs.x, this->y * rhs.y, this->z * rhs.z); }
-		Vector3 operator/(const Vector3 &rhs) const { return Vector3(this->x / rhs.x, this->y / rhs.y, this->z / rhs.z); }
-		//Vector3 operator%(const Vector3 &rhs) const { return Vector3(this->x % rhs.x, this->y % rhs.y, this->z % rhs.z); }
+		Vector3 operator+(const Vector3 &rhs) const;
+		Vector3 operator-(const Vector3 &rhs) const;
+		Vector3 operator*(const Vector3 &rhs) const;
+		Vector3 operator/(const Vector3 &rhs) const;
 
-		Vector3 operator+(const double &rhs) const { return Vector3(this->x + rhs, this->y + rhs, this->z + rhs); }
-		Vector3 operator-(const double &rhs) const { return Vector3(this->x - rhs, this->y - rhs, this->z - rhs); }
-		Vector3 operator*(const double &rhs) const { return Vector3(this->x * rhs, this->y * rhs, this->z * rhs); }
-		Vector3 operator/(const double &rhs) const { return Vector3(this->x / rhs, this->y / rhs, this->z / rhs); }
+		Vector3 operator+(const double &rhs) const;
+		Vector3 operator-(const double &rhs) const;
+		Vector3 operator*(const double &rhs) const;
+		Vector3 operator/(const double &rhs) const;
 
-		Vector3& operator+=(const Vector3& rhs)
-		{
-			this->x += rhs.x;
-			this->y += rhs.y;
-			this->z += rhs.z;
-			return *this;
-		}
-		Vector3& operator*=(const Vector3 &rhs)
-		{
-			this->x *= rhs.x;
-			this->y *= rhs.y;
-			this->z *= rhs.z;
-			return *this;
-		}
+		Vector3& operator+=(const Vector3& rhs);
+		Vector3& operator*=(const Vector3 &rhs);
+
+		static Vector3 RotateX(Vector3 point, double angle);
+		static Vector3 RotateY(Vector3 point, double angle);
+		static Vector3 RotateZ(Vector3 point, double angle);
+		static Vector3 Rotate(Vector3 point, Vector3 angles);
+		static Vector3 ToScreenSpace(Vector3 a);
 };
 
 #endif

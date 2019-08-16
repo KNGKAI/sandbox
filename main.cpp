@@ -3,26 +3,37 @@
 #include "sandbox.h"
 #include "scene.h"
 
+Scene scene("scene/scene.json");
+IEntity *player;
+/*
+void start()
+{
+	player = new Object("Player");
+	player->mesh.verticies.clear();
+	player->mesh.triangles.clear();
+	player->mesh.verticies.add();
+	player->mesh.triangles.add();
+	player->transform.position.y = 0.5;
+	scene.objects()->add(player);
+}*/
+
 void update()
 {
     double speed;
 
     speed = 5;
-    if (Input::getKey(Key_Up, Key_State_Hold)) { Camera::transform.position.y += speed * Sandbox::deltaTime(); }
-    if (Input::getKey(Key_Down, Key_State_Hold)) { Camera::transform.position.y -= speed * Sandbox::deltaTime(); }
-    if (Input::getKey(Key_Right, Key_State_Hold)) { Camera::transform.position.x += speed * Sandbox::deltaTime(); }
-    if (Input::getKey(Key_Left, Key_State_Hold)) { Camera::transform.position.x -= speed * Sandbox::deltaTime(); }
+	//if (
+	if (glfwWindowShouldClose(Renderer::window())) { std::exit(0); }
 }
 
 int main(int ac, char ** av)
 {
-    Scene scene("scene/scene.json");
-    
+	//start();
     Sandbox::init();
     while (Sandbox::running())
     {
-        update();
         Sandbox::process(&scene);
+		update();
     }
     return (0);
 }
