@@ -7,7 +7,7 @@
 class Rigidbody : public Component
 {
 	public:
-		Rigidbody() : useGravity(false) { return; }
+		Rigidbody() : useGravity(true) { return; }
 		~Rigidbody() { return; }
 		Vector3 velocity;
 		double mass;

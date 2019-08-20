@@ -2,7 +2,9 @@
 #define VECTOR3_H
 
 #include <math.h>
-//#include <corecrt_math_defines.h>
+#ifndef __APPLE__
+#include <corecrt_math_defines.h>
+#endif
 
 struct Vector3
 {
@@ -26,13 +28,17 @@ struct Vector3
 		Vector3 operator/(const double &rhs) const;
 
 		Vector3& operator+=(const Vector3& rhs);
+		Vector3& operator-=(const Vector3& rhs);
 		Vector3& operator*=(const Vector3 &rhs);
+		Vector3& operator/=(const Vector3 &rhs);
 
 		static Vector3 RotateX(Vector3 point, double angle);
 		static Vector3 RotateY(Vector3 point, double angle);
 		static Vector3 RotateZ(Vector3 point, double angle);
 		static Vector3 Rotate(Vector3 point, Vector3 angles);
 		static Vector3 ToScreenSpace(Vector3 a);
+		static Vector3 TriangleNormal(Vector3 a, Vector3 b, Vector3 c);
+		static bool Render(Vector3 a, Vector3 b, Vector3 c);
 };
 
 #endif

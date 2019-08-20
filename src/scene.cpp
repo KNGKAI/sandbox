@@ -36,6 +36,14 @@ void Scene::addObjects(Json::Value objects)
 		{
 			obj->rigidbody.enabled = false;
 		}
+		if (!objects[i]["mesh"].empty())
+		{
+			obj->mesh = Mesh::Reader::loadMesh(objects[i]["mesh"].asString());
+		}
+		else
+		{
+			obj->mesh.enabled = false;
+		}
 		this->_objects->add(obj);
 		std::cout << obj->name() << " was added to scece" << std::endl;
 	}

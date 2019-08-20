@@ -45,17 +45,7 @@ List<T>::List()
 template <typename T>
 List<T>::~List()
 {
-    ListNode<T> *node;
-    ListNode<T> *temp;
-
-    if (this->_length == 0) { return; }
-    node = this->_nodes;
-    while (node != NULL)
-    {
-        temp = node->next;
-        delete node;
-        node = temp;
-    }
+	//this->clear();
     return;
 }
 
@@ -82,11 +72,19 @@ template <typename T>
 void List<T>::add(T val)
 {
     ListNode<T> *node;
+    ListNode<T> *temp;
 
     node = new ListNode<T>();
     node->value = val;
-    node->next = this->_nodes;
-    this->_nodes = node;
+    if (this->_length == 0)
+    {
+        this->_nodes = node;
+        this->_length++;
+        return;
+    }
+    temp = this->_nodes;
+    while (temp->next != NULL) { temp = temp->next; }
+    temp->next = node;
     this->_length++;
 }
 

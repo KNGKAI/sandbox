@@ -19,11 +19,28 @@ Vector3 &Vector3::operator+=(const Vector3& rhs)
 	this->z += rhs.z;
 	return *this;
 }
+
+Vector3 &Vector3::operator-=(const Vector3 &rhs)
+{
+	this->x -= rhs.x;
+	this->y -= rhs.y;
+	this->z -= rhs.z;
+	return *this;
+}
+
 Vector3 &Vector3::operator*=(const Vector3 &rhs)
 {
 	this->x *= rhs.x;
 	this->y *= rhs.y;
 	this->z *= rhs.z;
+	return *this;
+}
+
+Vector3 &Vector3::operator/=(const Vector3& rhs)
+{
+	this->x /= rhs.x;
+	this->y /= rhs.y;
+	this->z /= rhs.z;
 	return *this;
 }
 
@@ -69,4 +86,28 @@ Vector3 Vector3::ToScreenSpace(Vector3 a)
 		(Camera::surface.z / v.z * v.x + Camera::surface.x) * r,
 		(Camera::surface.z / v.z * v.y + Camera::surface.y),
 		0.0));
+}
+
+Vector3 Vector3::TriangleNormal(Vector3 a, Vector3 b, Vector3 c)
+{
+	Vector3 u;
+	Vector3 v;
+	Vector3 normal;
+
+	u = b - a;
+	v = c - a;
+	normal.x = (u.y * v.z) - (u.z * v.y);
+	normal.y = (u.z * v.x) - (u.x * v.z);
+	normal.z = (u.x * v.y) - (u.y * v.x);
+	return (normal);
+}
+bool Vector3::Render(Vector3 a, Vector3 b, Vector3 c)
+{
+	a -= Camera::transform.position;
+	a = Vector3::Rotate(a, Camera::transform.rotation);
+	b -= Camera::transform.position;
+	b = Vector3::Rotate(b, Camera::transform.rotation);
+	c -= Camera::transform.position;
+	c = Vector3::Rotate(c, Camera::transform.rotation);
+	return (Vector3::TriangleNormal(a, b, c).z < 0);
 }

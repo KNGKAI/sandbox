@@ -45,72 +45,71 @@ void Renderer::renderScene()
 	List<double> v;
 	int c;
 
-    glColor3f(0, 0, 0);
-    glBegin(GL_POLYGON);
-    glVertex2f(1.0, 1.0);
-    glVertex2f(1.0, -1.0);
-    glVertex2f(-1.0, 1.0);
-	glEnd();
 	c = 0;
 	glColor3f(1.0, 1.0, 1.0);
 	for (int i = 0; i < Sandbox::scene()->objects()->length(); i++)
 	{
 		obj = Sandbox::scene()->objects()->get(i);
-//		if (obj->mesh.enabled)
+		if (obj->mesh.enabled)
 		{
+			glColor3f(obj->mesh.color.x, obj->mesh.color.y, obj->mesh.color.z);
 			c += obj->mesh.triangles.length();
 			for (int j = 0; j < obj->mesh.triangles.length(); j++)
 			{
-				Vector3 a = obj->mesh.verticies.get(obj->mesh.triangles.get(j));
-				a = Vector3::Rotate(a, obj->transform.rotation) + obj->transform.position;
-				a =	Vector3::ToScreenSpace(a);
-				v.add(a.y);
-				v.add(a.x);
-				if (j % 3 == 0)
+				switch (obj->mesh.renderType)
 				{
-					glBegin(GL_LINES);
-					glVertex2f(a.x, a.y);
-					a = obj->mesh.verticies.get(obj->mesh.triangles.get(j + 1));
-					a = Vector3::Rotate(a, obj->transform.rotation) + obj->transform.position;
-					a = Vector3::ToScreenSpace(a);
-					glVertex2f(a.x, a.y);
-					glEnd();
-					glBegin(GL_LINES);
-					glVertex2f(a.x, a.y);
-					a = obj->mesh.verticies.get(obj->mesh.triangles.get(j + 2));
-					a = Vector3::Rotate(a, obj->transform.rotation) + obj->transform.position;
-					a = Vector3::ToScreenSpace(a);
-					glVertex2f(a.x, a.y);
-					glEnd();
-					glBegin(GL_LINES);
-					glVertex2f(a.x, a.y);
-					a = obj->mesh.verticies.get(obj->mesh.triangles.get(j));
-					a = Vector3::Rotate(a, obj->transform.rotation) + obj->transform.position;
-					a = Vector3::ToScreenSpace(a);
-					glVertex2f(a.x, a.y);
-					glEnd();
+					case RENDER_NONE: break;
+					case RENDER_STANDARD: break;
+					case RENDER_WIRE:
+						if (j % 3 == 0)
+						{
+							Vector3 a = obj->mesh.verticies.get(obj->mesh.triangles.get(j));
+							Vector3 b = obj->mesh.verticies.get(obj->mesh.triangles.get(j + 1));
+							Vector3 c = obj->mesh.verticies.get(obj->mesh.triangles.get(j + 2));
+							a = Vector3::Rotate(a, obj->transform.rotation) + obj->transform.position;
+							a = Vector3::ToScreenSpace(a);
+							b = Vector3::Rotate(b, obj->transform.rotation) + obj->transform.position;
+							b = Vector3::ToScreenSpace(b);
+							c = Vector3::Rotate(c, obj->transform.rotation) + obj->transform.position;
+							c = Vector3::ToScreenSpace(c);
+							if (Vector3::Render(a, b, c))
+							{
+								glBegin(GL_LINES);
+								glVertex2f(a.x, a.y);
+								glVertex2f(b.x, b.y);
+								glEnd();
+								glBegin(GL_LINES);
+								glVertex2f(b.x, b.y);
+								glVertex2f(c.x, c.y);
+								glEnd();
+								glBegin(GL_LINES);
+								glVertex2f(c.x, c.y);
+								glVertex2f(a.x, a.y);
+								glEnd();
+							}
+						}
+						break;
+					default: break;
 				}
 			}
 		}
 	}
 
-	glColor4f(0.0, 0.5, 0.0, 0.5);
+	// double *a = v.to_array();
+	// unsigned int buffer;
+	// glGenBuffers(1, &buffer);
+	// glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	// glBufferData(GL_ARRAY_BUFFER, sizeof(double) * v.length(), a, GL_STATIC_DRAW);
 
-	double *a = v.to_array();
-	unsigned int buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(double) * v.length(), a, GL_STATIC_DRAW);
+	// glEnableVertexAttribArray(0);
+	// glVertexAttribPointer(0, 2, GL_DOUBLE, GL_FALSE, sizeof(double) * 2, 0);
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_DOUBLE, GL_FALSE, sizeof(double) * 2, 0);
+	// std::string vertexShader = Renderer::loadShader("shaders/vertex.shader");
+	// std::string fragmentShader = Renderer::loadShader("shaders/fragment.shader");
+	// unsigned int shader = Renderer::createShader(vertexShader, fragmentShader);
+	// glUseProgram(shader);
 
-	std::string vertexShader = Renderer::loadShader("shaders/vertex.shader");
-	std::string fragmentShader = Renderer::loadShader("shaders/fragment.shader");
-	unsigned int shader = Renderer::createShader(vertexShader, fragmentShader);
-	glUseProgram(shader);
-
-	glDrawArrays(GL_TRIANGLES, 0, c);
+	//glDrawArrays(GL_TRIANGLES, 0, c);
 }
 
 void Renderer::renderGUI()
@@ -189,10 +188,7 @@ std::string Renderer::loadShader(const std::string path)
 	std::string line;
 
 	shader = "";
-	while (std::getline(file, line))
-	{
-		shader += line + "\n";
-	}
+	while (std::getline(file, line)) { shader += line + "\n"; }
 	return (shader);
 }
 
@@ -205,10 +201,10 @@ void Renderer::init()
     }
 #if __APPLE__ // GL 3.2 + GLSL 150
     const char* glsl_version = "#version 150";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
 #else // GL 3.0 + GLSL 130
     const char* glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -224,19 +220,20 @@ void Renderer::init()
         std::exit(EXIT_FAILURE);
     }
     glfwMakeContextCurrent(Renderer::window());
-    glewInit();    
-    ImGui::CreateContext();
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(Renderer::window(), true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
+    // glewInit();    
+    // ImGui::CreateContext();
+    // ImGui::StyleColorsDark();
+    // ImGui_ImplGlfw_InitForOpenGL(Renderer::window(), true);
+    // ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
 void Renderer::render()
 {
+	if (glfwWindowShouldClose(Renderer::window())) { std::exit(0); }
     glClear(GL_COLOR_BUFFER_BIT);
     Renderer::input();
     Renderer::renderScene();
-    Renderer::renderGUI();
+    //Renderer::renderGUI();
     glfwSwapBuffers(Renderer::window());
     glfwPollEvents();
 }
@@ -245,9 +242,9 @@ void Renderer::destroy()
 {
     glfwDestroyWindow(Renderer::window());
     glfwTerminate();
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    // ImGui_ImplOpenGL3_Shutdown();
+    // ImGui_ImplGlfw_Shutdown();
+    // ImGui::DestroyContext();
 }
 
 GLFWwindow *Renderer::window() { return (Renderer::_window); }

@@ -1,6 +1,6 @@
 #include "camera.h"
 
-Transform Camera::transform = Transform();
+Transform Camera::transform = Transform(Vector3(0, 4, -10));
 
 Vector3 Camera::surface = Vector3(0 , 0, 1);
 
