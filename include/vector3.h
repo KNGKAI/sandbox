@@ -6,6 +6,9 @@
 #include <corecrt_math_defines.h>
 #endif
 
+#include "glm.hpp"
+#include "gtc/quaternion.hpp"
+
 struct Vector3
 {
     public:
@@ -39,6 +42,20 @@ struct Vector3
 		static Vector3 ToScreenSpace(Vector3 a);
 		static Vector3 TriangleNormal(Vector3 a, Vector3 b, Vector3 c);
 		static bool Render(Vector3 a, Vector3 b, Vector3 c);
+		static double angleBetween(Vector3 a, Vector3 b)
+		{
+			glm::vec3 da = glm::normalize(glm::vec3(a.x, a.y, a.z));
+			glm::vec3 db = glm::normalize(glm::vec3(b.x, b.y, b.z));
+			return (glm::acos(glm::dot(da, db)) * 180.0 / M_PI);
+		}
+		static double Magnitude(Vector3 a)
+		{
+			return (sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2)));
+		}
+		static Vector3 Normalized(Vector3 a)
+		{
+			return (a / Vector3::Magnitude(a));
+		}
 };
 
 #endif

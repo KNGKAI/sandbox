@@ -11,6 +11,14 @@
 #define RENDER_STANDARD 1
 #define RENDER_WIRE 2
 
+struct Triangle
+{
+	public:
+		Vector3 p1;
+		Vector3 p2;
+		Vector3 p3;
+};
+
 class Mesh : public Component
 {
     public:

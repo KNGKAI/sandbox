@@ -28,6 +28,11 @@ void update()
 
 	if (Input::getKey(Key_P, Key_State_Hold)) { Camera::surface.z += Sandbox::deltaTime(); }
 	if (Input::getKey(Key_O, Key_State_Hold)) { Camera::surface.z -= Sandbox::deltaTime(); }
+	
+	if (Input::getKey(Key_W, Key_State_Hold)) { Renderer::sun.z += Sandbox::deltaTime(); }
+	if (Input::getKey(Key_S, Key_State_Hold)) { Renderer::sun.z -= speed * Sandbox::deltaTime(); }
+	if (Input::getKey(Key_D, Key_State_Hold)) { Renderer::sun.x += speed * Sandbox::deltaTime(); }
+	if (Input::getKey(Key_A, Key_State_Hold)) { Renderer::sun.x -= speed * Sandbox::deltaTime(); }
 }
 
 int main(int ac, char ** av)

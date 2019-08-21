@@ -75,17 +75,15 @@ Vector3 Vector3::Rotate(Vector3 point, Vector3 angles)
 
 Vector3 Vector3::ToScreenSpace(Vector3 a)
 {
-	Vector3 v;
-	int width, height;
+	int width;
+	int height;
 
-	v = a - Camera::transform.position;
-	v = Vector3::Rotate(v, Camera::transform.rotation);
 	glfwGetWindowSize(Renderer::window(), &width, &height);
 	double r = (double)(height) / width;
 	return (Vector3(
-		(Camera::surface.z / v.z * v.x + Camera::surface.x) * r,
-		(Camera::surface.z / v.z * v.y + Camera::surface.y),
-		0.0));
+		(Camera::surface.z / a.z * a.x + Camera::surface.x) * r,
+		(Camera::surface.z / a.z * a.y + Camera::surface.y),
+		a.z));
 }
 
 Vector3 Vector3::TriangleNormal(Vector3 a, Vector3 b, Vector3 c)
@@ -101,6 +99,7 @@ Vector3 Vector3::TriangleNormal(Vector3 a, Vector3 b, Vector3 c)
 	normal.z = (u.x * v.y) - (u.y * v.x);
 	return (normal);
 }
+
 bool Vector3::Render(Vector3 a, Vector3 b, Vector3 c)
 {
 	a -= Camera::transform.position;

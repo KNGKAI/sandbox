@@ -17,9 +17,12 @@ class Renderer
         static GLFWwindow*  _window;
 
         static void     input();
+		static void		renderSceneObject(IEntity *object);
+		static void		renderSceneObjects();
+		static void		renderSceneGrid();
         static void     renderScene();
+		static void     renderGUIDebug();
         static void     renderGUI();
-        static void     renderDebug();
         static int          compileShader(const std::string &src, unsigned int type);
         static unsigned int createShader(const std::string &vertexShader, const std::string &fragShader);
         static std::string  loadShader(const std::string path);
@@ -30,6 +33,7 @@ class Renderer
         static void     destroy();
 
         static GLFWwindow*  window();
+		static Vector3		sun;
 };
 
 #endif

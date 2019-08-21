@@ -27,6 +27,7 @@ void Scene::addObjects(Json::Value objects)
 		name = objects[i]["name"].empty() ? "object" : objects[i]["name"].asString();
 		obj = new Object(name);
 		if (!objects[i]["position"].empty()) { obj->transform.position = Vector3(objects[i]["position"][0].asDouble(), objects[i]["position"][1].asDouble(), objects[i]["position"][2].asDouble()); }
+		if (!objects[i]["rotation"].empty()) { obj->transform.rotation = Vector3(objects[i]["rotation"][0].asDouble(), objects[i]["rotation"][1].asDouble(), objects[i]["rotation"][2].asDouble()); }
 		if (!objects[i]["rigidbody"].empty())
 		{
 			obj->rigidbody.useGravity = objects[i]["rigidbody"]["useGravity"].empty() ? false : objects[i]["rigidbody"]["useGravity"].asBool();

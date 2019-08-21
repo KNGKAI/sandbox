@@ -20,7 +20,8 @@ GLEW_INC = -I $(DEP_DIR)/glew/2.1.0/include
 GLFW_INC = -I $(DEP_DIR)/glfw/3.3/include/
 IMGUI_INC = -I ./lib/gui/
 JSON_INC = -I ./lib/json/include
-INC = -I include $(GLEW_INC) $(GLFW_INC) $(IMGUI_INC) $(JSON_INC)
+GLM_INC = -I ./lib/glm
+INC = -I include $(GLEW_INC) $(GLFW_INC) $(IMGUI_INC) $(JSON_INC) $(GLM_INC)
 
 SRC = src/*.cpp
 OBJ = obj/*.o

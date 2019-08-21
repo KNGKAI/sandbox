@@ -6,7 +6,7 @@
 
 Mesh::Mesh()
 {
-	this->renderType = RENDER_WIRE;
+	this->renderType = RENDER_STANDARD;
 	this->color = Vector3(1, 1, 1);
 	return;
 }

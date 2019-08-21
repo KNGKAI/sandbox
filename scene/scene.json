@@ -10,12 +10,13 @@
 		{
 			"name": "test_object",
 			"position": [ -5, 0, 0 ],
-			"mesh": "mesh/monkey.obj"
+			"mesh": "mesh/cube.obj"
 		},
 		{
 			"name": "object",
-			"position": [ 5, 0, 0 ],
-			"mesh": "mesh/sphere.obj"
+			"position": [ 4, 0, 1 ],
+			"rotation": [0, 135, 0],
+			"mesh": "mesh/monkey.obj"
 		}
 	]
 }
