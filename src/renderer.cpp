@@ -167,7 +167,6 @@ void Renderer::renderSceneGrid()
 	glVertex2f((GLfloat)a.x, (GLfloat)a.y);
 	glVertex2f((GLfloat)b.x, (GLfloat)b.y);
 	glEnd();
-
 }
 
 void Renderer::renderScene()

@@ -5,14 +5,15 @@
 
 Scene scene("scene/scene.json");
 IEntity *player;
+IEntity *monkey;
 
 void start()
 {
 	player = new Object("Player");
 	player->mesh = Mesh::Reader::loadMesh("mesh/cube.obj");
 	player->mesh.color = Vector3(0.5, 0.5, 1.0);
-	scene.objects()->add(player);
-    std::cout << "player added" << std::endl;
+	scene.addObject(player);
+	monkey = scene.getObject("monkey_object");
 }
 
 void update()
@@ -33,6 +34,8 @@ void update()
 	if (Input::getKey(Key_S, Key_State_Hold)) { Renderer::sun.z -= speed * Sandbox::deltaTime(); }
 	if (Input::getKey(Key_D, Key_State_Hold)) { Renderer::sun.x += speed * Sandbox::deltaTime(); }
 	if (Input::getKey(Key_A, Key_State_Hold)) { Renderer::sun.x -= speed * Sandbox::deltaTime(); }
+
+	monkey->transform.rotation.y += 30 * Sandbox::deltaTime();
 }
 
 int main(int ac, char ** av)

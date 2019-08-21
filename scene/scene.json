@@ -1,10 +1,12 @@
 {
 	"name": "test scene",
+	"gravity": -9.8,
 	"camera": {
 		"position": [ 0, 2, -10 ],
 		"rotation": [ 0, 0, 0 ],
-		"surface": [ 0, 0, 1 ],
-		"fov": 90
+		"fov": 90,
+		"nearPlane": 0.1,
+		"farPlane": 1000
 	},
 	"objects": [
 		{
@@ -13,7 +15,7 @@
 			"mesh": "mesh/cube.obj"
 		},
 		{
-			"name": "object",
+			"name": "monkey_object",
 			"position": [ 4, 0, 1 ],
 			"rotation": [0, 135, 0],
 			"mesh": "mesh/monkey.obj"

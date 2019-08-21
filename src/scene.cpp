@@ -45,8 +45,7 @@ void Scene::addObjects(Json::Value objects)
 		{
 			obj->mesh.enabled = false;
 		}
-		this->_objects->add(obj);
-		std::cout << obj->name() << " was added to scece" << std::endl;
+		Scene::addObject(obj);
 	}
 }
 
@@ -68,3 +67,24 @@ Scene::~Scene() { return; }
 std::string Scene::name() { return (this->_name); }
 
 List<IEntity *> *Scene::objects() { return (this->_objects); }
+
+void Scene::addObject(IEntity *object)
+{
+	this->_objects->add(object);
+	std::cout << object->name() << " was added to scene: " << this->_name << std::endl;
+}
+
+IEntity *Scene::getObject(std::string name)
+{
+	List<IEntity *> *objects;
+
+	objects = this->_objects;
+	for (int i = 0; i < objects->length(); i++)
+	{
+		if (objects->get(i)->name() == name)
+		{
+			return (objects->get(i));
+		}
+	}
+	return (nullptr);
+}

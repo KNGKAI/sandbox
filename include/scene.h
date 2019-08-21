@@ -28,7 +28,8 @@ class Scene
 
 		std::string     name();
 		List<IEntity *>    *objects();
-		List<IEntity *>    *objectsProcessed();
+		void	addObject(IEntity *object);
+		IEntity	*getObject(std::string name);
 };
 
 #endif
