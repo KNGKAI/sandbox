@@ -17,16 +17,17 @@ class IEntity
 {
     protected:
         std::string     _name;
+
     public:
         Transform       transform;
 		Rigidbody		rigidbody;
 		Mesh			mesh;
         std::string     name() { return(_name); }
-        
+
         virtual void            start() { return; }
         virtual void            update() { return; }
 
-        virtual EntityType     getType() = 0;
+        virtual EntityType      getType() = 0;
 };
 
 #endif
