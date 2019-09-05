@@ -6,10 +6,9 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/**/*",
                 "${workspaceFolder}/include/*",
-                "${workspaceFolder}/lib/json/include/*",
-                "${workspaceFolder}/lib/gui/*",
-                "~/.brew/Cellar/glfw/3.3/include/",
-                "~/.brew/Cellar/glew/2.1.0/include/"
+                "${workspaceFolder}/lib/glfw/include/*",
+                "${workspaceFolder}/lib/glad/include/*",
+                "${workspaceFolder}/lib/json/include/*"
             ],
             "defines": [],
             "macFrameworkPath": [

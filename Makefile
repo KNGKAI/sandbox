@@ -7,23 +7,19 @@ TARGET = $(TARGET_DIR)$(NAME)
 COMPILER = clang++
 FLAGS = -w -Werror -Wextra -Wall -framework Opengl
 
-DEP_DIR = ~/.brew/Cellar
-
 OPENGL_DEP = -framework OpenGL
-GLEW_DEP = $(DEP_DIR)/glew/2.1.0/lib/libGLEW.2.1.0.dylib
-GLFW_DEP = $(DEP_DIR)/glfw/3.3/lib/libglfw.3.3.dylib
-IMGUI_DEP = ./lib/gui/imgui*.cpp #.dynlib
+GLFW_DEP = ./lib/glfw/lib/libglfw.3.3.dylib
+GLAD_DEP = ./lib/glad/glad.o
 JSON_DEP = ./lib/json/jsoncpp.cpp
 
-DEP = $(OPENGL_DEP) $(GLEW_DEP) $(GLFW_DEP) $(JSON_DEP)
+DEP = $(OPENGL_DEP) $(GLFW_DEP) $(GLAD_DEP) $(JSON_DEP)
 
-GLEW_INC = -I $(DEP_DIR)/glew/2.1.0/include
-GLFW_INC = -I $(DEP_DIR)/glfw/3.3/include/
-IMGUI_INC = -I ./lib/gui/
-JSON_INC = -I ./lib/json/include
-GLM_INC = -I ./lib/glm
+GLFW_INC = -I ./lib/glfw/include/
+GLAD_INC = -I ./lib/glad/include/
+JSON_INC = -I ./lib/json/include/
+GLM_INC = -I ./lib/glm/
 
-INC = -I include $(GLEW_INC) $(GLFW_INC) $(JSON_INC) $(GLM_INC)
+INC = -I include $(GLFW_INC) $(GLAD_INC) $(JSON_INC) $(GLM_INC)
 
 SRC = src/*.cpp
 OBJ = obj/*.o
