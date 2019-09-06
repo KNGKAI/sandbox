@@ -1,15 +1,15 @@
 #ifndef RIGIDBODY_H
 #define RIGIDBODY_H
 
-#include "vector3.h"
+#include "vector.h"
 #include "icomponent.h"
 
-class Rigidbody : public Component
+class Rigidbody : public IComponent
 {
 	public:
 		Rigidbody() : useGravity(true) { return; }
 		~Rigidbody() { return; }
-		Vector3 velocity;
+		vec3 velocity;
 		double mass;
 		bool useGravity;
 };

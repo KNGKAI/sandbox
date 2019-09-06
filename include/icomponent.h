@@ -1,10 +1,10 @@
 #ifndef ICOMPONENT_H
 #define ICOMPONENT_H
 
-class Component
+class IComponent
 {
 	public:
-		Component() : enabled(true) { return; }
+		IComponent() : enabled(true) { return; }
 		bool enabled;
 };
 

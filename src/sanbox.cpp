@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "sandbox.h"
 
 Scene *Sandbox::_scene = nullptr;
@@ -19,7 +17,7 @@ void Sandbox::init()
 
 void Sandbox::process(Scene *scene)
 {
-	IEntity *obj;
+	IObject *obj;
     double t;
 
     if (!Sandbox::running()) { return; }
@@ -28,12 +26,8 @@ void Sandbox::process(Scene *scene)
     Input::process();
 	if (!Sandbox::paused())
 	{
-		Physics::process();
-		for (int i = 0; i < Sandbox::scene()->objects()->length(); i++)
-		{
-			obj = Sandbox::scene()->objects()->get(i);
-			obj->update();
-		}
+		//Physics::process();
+        for (auto i = Sandbox::scene()->objects()->begin(); i != Sandbox::scene()->objects()->end(); i++) { (*i)->update(); }
 	}
     Renderer::render();
     Sandbox::_deltaTime = Sandbox::time() - t;

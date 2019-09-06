@@ -1,10 +1,14 @@
 #include "renderer.h"
 #include "sandbox.h"
-#include <fstream>
+#include "filesystem.h"
 
 GLFWwindow *Renderer::_window = nullptr;
 
-Vector3 Renderer::sun = Vector3(-0.3, -0.4, 0.2);
+vec3 Renderer::sun = vec3(-0.3, -0.4, 0.2);
+
+Shader Renderer::ourShader("shaders/fragment.shader", "shaders/vertex.shader");
+
+Model Renderer::ourModel(FileSystem::getPath("mesh/cugbe.obj"));
 
 void Renderer::input()
 {
@@ -41,183 +45,34 @@ void Renderer::input()
 	if (glfwGetKey(Renderer::window(), GLFW_KEY_Z) == GLFW_PRESS) { Input::press(Key_Z); }
 }
 
-void Renderer::renderSceneObject(IEntity *object)
+void Renderer::renderSceneObject(const IObject &object, const Shader &shader)
 {
-	Vector3 a;
-	Vector3 b;
-	Vector3 c;
-	Vector3 d;
-	Vector3 sun;
-	double t;
-
-	if (object->mesh.enabled)
+	if (object.model.enabled)
 	{
-		glColor3f(object->mesh.color.x, object->mesh.color.y, object->mesh.color.z);
-		for (int j = 0; j < object->mesh.triangles.length(); j += 3)
-		{
-			d = object->transform.position - Camera::transform.position;
-			a = Vector3::Rotate(
-				Vector3::Rotate(
-					object->mesh.verticies.get(object->mesh.triangles.get(j)),
-					object->transform.rotation) + d,
-				Camera::transform.rotation);
-			b = Vector3::Rotate(
-				Vector3::Rotate(
-					object->mesh.verticies.get(object->mesh.triangles.get(j + 1)),
-					object->transform.rotation) + d,
-				Camera::transform.rotation);
-			c = Vector3::Rotate(
-				Vector3::Rotate(
-					object->mesh.verticies.get(object->mesh.triangles.get(j + 2)),
-					object->transform.rotation) + d,
-				Camera::transform.rotation);
-			d = Vector3::TriangleNormal(a, b, c);
-			t = Vector3::angleBetween(d, Renderer::sun) / 180;
-			a = Vector3::ToScreenSpace(a);
-			b = Vector3::ToScreenSpace(b);
-			c = Vector3::ToScreenSpace(c);
-			d = Vector3::TriangleNormal(a, b, c);
-			if (d.z < 0)
-			{
-				switch (object->mesh.renderType)
-				{
-				case RENDER_NONE: break;
-				case RENDER_STANDARD:
-					glColor3f(object->mesh.color.x * t, object->mesh.color.y * t, object->mesh.color.z * t);
-					glBegin(GL_TRIANGLE_FAN);
-					glVertex2f((GLfloat)a.x, (GLfloat)a.y);
-					glVertex2f((GLfloat)b.x, (GLfloat)b.y);
-					glVertex2f((GLfloat)c.x, (GLfloat)c.y);
-					glEnd();
-					break;
-				case RENDER_WIRE:
-					glBegin(GL_LINES);
-					glVertex2f((GLfloat)a.x, (GLfloat)a.y);
-					glVertex2f((GLfloat)b.x, (GLfloat)b.y);
-					glEnd();
-					glBegin(GL_LINES);
-					glVertex2f((GLfloat)b.x, (GLfloat)b.y);
-					glVertex2f((GLfloat)c.x, (GLfloat)c.y);
-					glEnd();
-					glBegin(GL_LINES);
-					glVertex2f((GLfloat)c.x, (GLfloat)c.y);
-					glVertex2f((GLfloat)a.x, (GLfloat)a.y);
-					glEnd();
-					break;
-				default: break;
-				}
-			}
-		}
+		//
 	}
 }
 
 void Renderer::renderSceneObjects()
 {
-	List<IEntity *> *objects;
+	IObject *obj;
 
-	objects = Sandbox::scene()->objects();
-	for (int i = 0; i < objects->length(); i++)
+	for (auto i = Sandbox::scene()->objects()->begin(); i != Sandbox::scene()->objects()->begin(); i++)
 	{
-		Renderer::renderSceneObject(objects->get(i));
+		obj = *i;
 	}
-}
-
-void Renderer::renderSceneGrid()
-{
-	Vector3 a;
-	Vector3 b;
-	int raduis;
-
-	raduis = 8;
-	glColor3f(0.5, 0.5, 0.5);
-	for (int x = -raduis; x <= raduis; x++)
-	{
-		a.x = x;
-		b.x = x;
-		a.y = 0;
-		b.y = 0;
-		a.z = -raduis;
-		b.z = raduis;
-		a = Vector3::ToScreenSpace(Vector3::Rotate(a - Camera::transform.position, Camera::transform.rotation));
-		b = Vector3::ToScreenSpace(Vector3::Rotate(b - Camera::transform.position, Camera::transform.rotation));
-		glBegin(GL_LINES);
-		glVertex2f((GLfloat)a.x, (GLfloat)a.y);
-		glVertex2f((GLfloat)b.x, (GLfloat)b.y);
-		glEnd();
-	}
-	for (int y = -raduis; y <= raduis; y++)
-	{
-		a.x = -raduis;
-		b.x = raduis;
-		a.y = 0;
-		b.y = 0;
-		a.z = y;
-		b.z = y;
-		a = Vector3::ToScreenSpace(Vector3::Rotate(a - Camera::transform.position, Camera::transform.rotation));
-		b = Vector3::ToScreenSpace(Vector3::Rotate(b - Camera::transform.position, Camera::transform.rotation));
-		glBegin(GL_LINES);
-		glVertex2f((GLfloat)a.x, (GLfloat)a.y);
-		glVertex2f((GLfloat)b.x, (GLfloat)b.y);
-		glEnd();
-	}
-	a = Vector3::ToScreenSpace(Vector3::Rotate(Vector3(0, 0, 0)- Camera::transform.position, Camera::transform.rotation));
-	b = Vector3::ToScreenSpace(Vector3::Rotate(Vector3::Normalized(Renderer::sun) - Camera::transform.position, Camera::transform.rotation));
-	glColor3f(1.0, 1.0, 0.0);
-	glBegin(GL_LINES);
-	glVertex2f((GLfloat)a.x, (GLfloat)a.y);
-	glVertex2f((GLfloat)b.x, (GLfloat)b.y);
-	glEnd();
+	
 }
 
 void Renderer::renderScene()
 {
-	Renderer::renderSceneGrid();
-	Renderer::renderSceneObjects();
-}
-
-void Renderer::renderGUIDebug()
-{
-	bool a = false;
-	std::string type;
-
-	ImGui::Begin("Debug", &a);
-	ImGui::Text(("FPS: " + std::to_string((int)(1 / Sandbox::deltaTime()))).c_str());
-	ImGui::Text(("Delta Time: " + std::to_string(Sandbox::deltaTime())).c_str());
-	ImGui::Text("-----");
-	ImGui::Text("Scene");
-	ImGui::Text(("\tName: " + Sandbox::scene()->name()).c_str());
-	ImGui::Text(("\tCamera:\n\t\tpos x:" + std::to_string(Camera::transform.position.x) + "pos y : " + std::to_string(Camera::transform.position.y) + " pos z : " + std::to_string(Camera::transform.position.z) + "\n\t\trot x:" + std::to_string(Camera::transform.rotation.x) + " rot y : " + std::to_string(Camera::transform.rotation.y) + " rot z : " + std::to_string(Camera::transform.rotation.z) + "\n\t\tsur x : " + std::to_string(Camera::surface.x) + " sur y : " + std::to_string(Camera::surface.y)).c_str());
-	ImGui::Text("Objects:");;
-	for (int i = 0; i < Sandbox::scene()->objects()->length(); i++)
-	{
-		IEntity *obj = Sandbox::scene()->objects()->get(i);
-		if (ImGui::BeginMenu(obj->name().c_str(), true))
-		{
-			ImGui::Text(("pos x:" + std::to_string(obj->transform.position.x) + ":y:" + std::to_string(obj->transform.position.y) + ":z:" + std::to_string(obj->transform.position.z)).c_str());
-			ImGui::Text(("rot x:" + std::to_string(obj->transform.rotation.x) + ":y:" + std::to_string(obj->transform.rotation.y) + ":z:" + std::to_string(obj->transform.rotation.z)).c_str());
-			if (obj->rigidbody.enabled)
-			{
-				ImGui::Text("Rigidbody");
-				ImGui::Text(("mass:" + std::to_string(obj->rigidbody.mass)).c_str());
-				ImGui::Text(("vel x:" + std::to_string(obj->rigidbody.velocity.x) + ":y:" + std::to_string(obj->rigidbody.velocity.y) + ":z:" + std::to_string(obj->rigidbody.velocity.z)).c_str());
-			}
-			ImGui::EndMenu();
-		}
-	}
-	std::string keys = "Keys: ";
-	for (int j = 0; j < Input::keys()->length(); j++) { keys += std::to_string(Input::keys()->get(j)->val) + " (" + std::to_string(Input::keys()->get(j)->state) + "), "; }
-	ImGui::Text(keys.c_str());
-	ImGui::End();
+	//Renderer::ourModel.Draw(Renderer::ourShader);
+	//Renderer::renderSceneObjects();
 }
 
 void Renderer::renderGUI()
 {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-    Renderer::renderGUIDebug();
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	//
 }
 
 int Renderer::compileShader(const std::string &src, unsigned int type)
@@ -262,18 +117,11 @@ void Renderer::init()
         std::cout << "GLFW init error" << std::endl;
         std::exit(EXIT_FAILURE);
     }
-#if __APPLE__ // GL 3.2 + GLSL 150
-    const char* glsl_version = "#version 150";
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
-#else // GL 3.0 + GLSL 130
-    const char* glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
     Renderer::_window = glfwCreateWindow(1280, 720, "Sandbox", NULL, NULL);
     if (!Renderer::window())
@@ -283,13 +131,11 @@ void Renderer::init()
         std::exit(EXIT_FAILURE);
     }
     glfwMakeContextCurrent(Renderer::window());
-#ifndef __APPLE__
-    glewInit();    
-    ImGui::CreateContext();
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(Renderer::window(), true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
-#endif
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "GLAD error" << std::endl;
+        std::exit(0);
+    }
 }
 
 void Renderer::render()
@@ -298,9 +144,7 @@ void Renderer::render()
     glClear(GL_COLOR_BUFFER_BIT);
     Renderer::input();
     Renderer::renderScene();
-#ifndef __APPLE__
     Renderer::renderGUI();
-#endif
     glfwSwapBuffers(Renderer::window());
     glfwPollEvents();
 }
@@ -309,11 +153,6 @@ void Renderer::destroy()
 {
     glfwDestroyWindow(Renderer::window());
     glfwTerminate();
-#ifndef __APPLE__
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-#endif
 }
 
 GLFWwindow *Renderer::window() { return (Renderer::_window); }

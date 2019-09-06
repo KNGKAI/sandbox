@@ -5,18 +5,15 @@
 #include <iostream>
 #include "json/json.h"
 
-#include "ientity.h"
-#include "list.h"
-#include "object.h"
-#include "mesh.h"
-#include "transform.h"
+#include "system.h"
+#include "iobject.h"
 #include "camera.h"
 
 class Scene
 {
     private:
         std::string         _name;
-        List<IEntity *>*    _objects;
+        vector<IObject *>	_objects;
 
 		void	setName(Json::Value name);
 		void	setCamera(Json::Value camera);
@@ -26,10 +23,10 @@ class Scene
 		Scene(std::string path); 
 		~Scene();
 
-		std::string     name();
-		List<IEntity *>    *objects();
-		void	addObject(IEntity *object);
-		IEntity	*getObject(std::string name);
+		std::string			name();
+		vector<IObject *>*	objects();
+		void				addObject(IObject *object);
+		IObject*			getObject(std::string name);
 };
 
 #endif

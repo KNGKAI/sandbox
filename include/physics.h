@@ -5,7 +5,6 @@ class Physics
 {
 	public:
 		static void process();
-
 };
 
 #endif

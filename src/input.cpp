@@ -1,40 +1,56 @@
 #include "input.h"
 
-List<Key*> *Input::_keys = new List<Key*>();
+vector<Key *> Input::_keys = vector<Key *>();
 
 void Input::press(EKeycode key)
 {
-    for (int i = 0; i < _keys->length(); i++)
+    Key *k;
+
+    for (auto i = Input::_keys.begin(); i != Input::_keys.end(); i++)
     {
-        if (_keys->get(i)->val == key)
+        k = *i;
+        if (k->val == key)
         {
-            if (_keys->get(i)->state == Key_State_Up) { _keys->get(i)->setState(Key_State_Hold); }
+            if (k->state == Key_State_Up) { k->setState(Key_State_Hold); }
             return;
         }
     }
-    _keys->add(new Key(key, Key_State_Down));
+    Input::_keys.push_back(new Key(key, Key_State_Down));
 }
 
 void Input::process()
 {
-    for (int i = _keys->length() - 1; i >= 0; i--)
+    Key *k;
+    
+    for (auto i = Input::_keys.begin(); i != Input::_keys.end(); i++)
     {
-        if (_keys->get(i)->state == Key_State_Down) { _keys->get(i)->setState(Key_State_Hold); }
-        else if (_keys->get(i)->state == Key_State_Hold) { _keys->get(i)->setState(Key_State_Up); }
-        else if (_keys->get(i)->state == Key_State_Up) { _keys->remove(i); }
+        k = *i;
+        switch (k->state)
+        {
+        case Key_State_Down: k->setState(Key_State_Hold); break;
+        case Key_State_Hold: k->setState(Key_State_Hold); break;
+        case Key_State_Up: Input::_keys.erase(i); break;
+        default: break;
+        }
     }
 }
 
 bool Input::getKey(EKeycode key, EKeycodeState state)
 {
-    for (int i = 0; i < _keys->length(); i++)
+    Key *k;
+    
+    for (auto i = Input::_keys.begin(); i != Input::_keys.end(); i++)
     {
-        if (_keys->get(i)->val == key)
+        k = *i;
+        if (k->val == key)
         {
-            if (_keys->get(i)->state == state) { return (true); }
+            if (k->state == state)
+            {
+                return (true);
+            }
         }
     }
     return (false);
 }
 
-List<Key*> *Input::keys() { return (Input::_keys); }
+vector<Key*> *Input::keys() { return (&Input::_keys); }

@@ -7,11 +7,10 @@
 #include "renderer.h"
 #include "input.h"
 #include "transform.h"
-#include "object.h"
-#include "vector3.h"
-#include "list.h"
-#include "ientity.h"
+#include "iobject.h"
+#include "vector.h"
 #include "physics.h"
+#include "system.h"
 
 class Sandbox
 {

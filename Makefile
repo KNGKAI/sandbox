@@ -8,20 +8,23 @@ COMPILER = clang++
 FLAGS = -w -Werror -Wextra -Wall -framework Opengl
 
 DEP_DIR = ~/.brew/Cellar
-OPENGL_DEP = -framework OpenGL
-GLEW_DEP = $(DEP_DIR)/glew/2.1.0/lib/libGLEW.2.1.0.dylib
+
+ASSIMP_DEP = ./lib/assimp/lib/libassimp.4.0.1.dylib 
+GLAD_DEP = ./lib/glad/glad.o
 GLFW_DEP = $(DEP_DIR)/glfw/3.3/lib/libglfw.3.3.dylib
-IMGUI_DEP = ./lib/gui/imgui*.cpp #.dynlib
 JSON_DEP = ./lib/json/jsoncpp.cpp
+OPENGL_DEP = -framework OpenGL
 
-DEP = $(OPENGL_DEP) $(GLEW_DEP) $(GLFW_DEP) $(IMGUI_DEP) $(JSON_DEP)
+DEP = $(ASSIMP_DEP) $(GLAD_DEP) $(GLFW_DEP) $(JSON_DEP) $(OPENGL_DEP)
 
-GLEW_INC = -I $(DEP_DIR)/glew/2.1.0/include
-GLFW_INC = -I $(DEP_DIR)/glfw/3.3/include/
-IMGUI_INC = -I ./lib/gui/
-JSON_INC = -I ./lib/json/include
+ASSIMP_INC = -I ./lib/assimp/include/
+GLAD_INC = -I ./lib/glad/include/
+GLFW_INC = -I ./lib/glfw/include/
 GLM_INC = -I ./lib/glm
-INC = -I include $(GLEW_INC) $(GLFW_INC) $(IMGUI_INC) $(JSON_INC) $(GLM_INC)
+JSON_INC = -I ./lib/json/include
+STB_INC = -I ./lib/stb/
+
+INC = -I ./include $(ASSIMP_INC) $(GLAD_INC) $(GLFW_INC) $(GLM_INC) $(JSON_INC) $(STB_INC)
 
 SRC = src/*.cpp
 OBJ = obj/*.o
