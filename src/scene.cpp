@@ -9,9 +9,9 @@ Scene::Scene(std::string path)
 
 	std::cout << "opening " << path << std::endl;
 	reader.parse(ifs, file);
-	this->setName(file["name"].asString());
-	this->setCamera(file["camera"]);
-	this->addObjects(file["objects"]);
+	this->setName(file["name"].empty() ? "scene" : file["name"].asString());
+	if (!file["camera"].empty()) { this->setCamera(file["camera"]); }
+	if (!file["objects"].empty()) { this->addObjects(file["objects"]); }
 }
 
 void Scene::setName(Json::Value name) { this->_name = name.asString(); }
@@ -25,20 +25,13 @@ void Scene::addObjects(Json::Value objects)
 	{
 		name = objects[i]["name"].empty() ? "object" : objects[i]["name"].asString();
 		obj = new IObject(name);
-		if (!objects[i]["position"].empty()) { obj->transform.position = vec3(objects[i]["position"][0].asDouble(), objects[i]["position"][1].asDouble(), objects[i]["position"][2].asDouble()); }
-		if (!objects[i]["rotation"].empty()) { obj->transform.rotation = vec3(objects[i]["rotation"][0].asDouble(), objects[i]["rotation"][1].asDouble(), objects[i]["rotation"][2].asDouble()); }
-		if (!objects[i]["rigidbody"].empty())
+		if (!objects[i]["position"].empty()) { obj->transform.position = vec3(objects[i]["position"][0].asFloat(), objects[i]["position"][1].asFloat(), objects[i]["position"][2].asFloat()); }
+		if (!objects[i]["rotation"].empty()) { obj->transform.rotation = vec3(objects[i]["rotation"][0].asFloat(), objects[i]["rotation"][1].asFloat(), objects[i]["rotation"][2].asFloat()); }
+		if (!objects[i]["scale"].empty()) { obj->transform.scale = vec3(objects[i]["scale"][0].asFloat(), objects[i]["scale"][1].asFloat(), objects[i]["scale"][2].asFloat()); }
+		if (!objects[i]["model"].empty())
 		{
-			//obj->rigidbody.useGravity = objects[i]["rigidbody"]["useGravity"].empty() ? false : objects[i]["rigidbody"]["useGravity"].asBool();
-			//obj->rigidbody.mass = objects[i]["rigidbody"]["mass"].empty() ? 1 : objects[i]["rigidbody"]["mass"].asDouble();
-		}
-		else
-		{
-			//obj->rigidbody.enabled = false;
-		}
-		if (!objects[i]["mesh"].empty())
-		{
-			//obj->mesh = Mesh::Reader::loadMesh(objects[i]["mesh"].asString());
+			obj->model.gammaCorrection = true;
+			obj->model.loadModel(objects[i]["model"].asString());
 		}
 		else
 		{
@@ -50,15 +43,12 @@ void Scene::addObjects(Json::Value objects)
 
 void Scene::setCamera(Json::Value camera)
 {
-	if (camera.empty())
-	{
-		Camera::enabled = false;
-		return;
-	}
-	Camera::transform.position = vec3(camera["position"][0].asDouble(), camera["position"][1].asDouble(), camera["position"][2].asDouble());
-	Camera::transform.rotation = vec3(camera["rotation"][0].asDouble(), camera["rotation"][1].asDouble(), camera["rotation"][2].asDouble());
-	Camera::surface = vec3(camera["surface"][0].asDouble(), camera["surface"][1].asDouble(), camera["surface"][2].asDouble());
-	Camera::fov = camera["fov"].asDouble();
+	this->_camera = Camera();
+	this->_camera.transform.position = vec3(camera["position"][0].asDouble(), camera["position"][1].asDouble(), camera["position"][2].asDouble());
+	this->_camera.transform.rotation = vec3(camera["rotation"][0].asDouble(), camera["rotation"][1].asDouble(), camera["rotation"][2].asDouble());
+	this->_camera.nearPlane = camera["nearPlane"].asFloat();
+	this->_camera.farPlane = camera["farPlane"].asFloat();
+	this->_camera.zoom = camera["zoom"].asFloat();
 }
 
 Scene::~Scene() { return; }
@@ -66,6 +56,8 @@ Scene::~Scene() { return; }
 std::string Scene::name() { return (this->_name); }
 
 vector<IObject *> *Scene::objects() { return (&this->_objects); }
+
+Camera* Scene::camera() { return (&this->_camera); }
 
 void Scene::addObject(IObject *object)
 {

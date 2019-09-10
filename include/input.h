@@ -1,7 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "system.h"
+#include "list.h"
 
 enum EKeycode
 {
@@ -60,12 +60,12 @@ struct Key
 class Input
 {
     private:
-        static vector<Key*>	_keys;
+        static List<Key*>		_keys;
     public:
         static void         	press(EKeycode key);
         static void         	process();
         static bool         	getKey(EKeycode key, EKeycodeState state);
-        static vector<Key*>*	keys();
+        static List<Key*>*		keys();
 };
 
 #endif

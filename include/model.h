@@ -14,27 +14,25 @@
 #include "icomponent.h"
 #include "system.h"
 
-using namespace std;
-
 unsigned int TextureFromFile(const char *path, const string &directory, bool gamma = false);
 
 class Model : public IComponent
 {
+	private:
+		void processNode(aiNode* node, const aiScene* scene);
+		Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+		vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
+
     public:
+		Model(bool gamma = false);
+
         vector<Texture> textures_loaded;
         vector<Mesh> meshes;
         string directory;
         bool gammaCorrection;
-        
-        Model();
-        Model(string const &path, bool gamma = false);
-        void Draw(Shader shader);
 
-    private:
-        void loadModel(string const &path);
-        void processNode(aiNode *node, const aiScene *scene);
-        Mesh processMesh(aiMesh *mesh, const aiScene *scene);
-        vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName);
+        void Draw(Shader shader);
+		void loadModel(string const& path);
 };
 
 #endif

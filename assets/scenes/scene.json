@@ -1,0 +1,27 @@
+{
+	"name": "test scene",
+	"gravity": -9.8,
+  "camera": {
+    "position": [ 0, 4, 0 ],
+    "rotation": [ -20, 0, 0 ],
+    "nearPlane": 0.1,
+    "farPlane": 1000,
+    "zoom": 45
+  },
+  "objects": [
+    {
+      "name": "cyborg",
+      "position": [ 0, 0, 7 ],
+      "rotation": [ 0, 0, 0 ],
+      "scale": [ 0.2, 0.2, 0.2 ],
+      "model": "assets/models/nanosuit/nanosuit.obj"
+    },
+    {
+      "name": "floor",
+      "position": [ 0, -1, 7 ],
+      "rotation": [ 0, 0, 0 ],
+      "scale": [ 10, 1, 10 ],
+      "model": "assets/models/cube.obj"
+    }
+  ]
+}

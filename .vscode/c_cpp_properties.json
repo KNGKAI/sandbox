@@ -10,8 +10,7 @@
                 "${workspaceFolder}/lib/glfw/include/*",
                 "${workspaceFolder}/lib/glad/include/*",
                 "${workspaceFolder}/lib/assimp/include/*",
-                "${workspaceFolder}/lib/glm/*",
-                "${workspaceFolder}/lib/gui/*"
+                "${workspaceFolder}/lib/glm/*"
             ],
             "defines": [],
             "macFrameworkPath": [

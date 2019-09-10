@@ -3,7 +3,7 @@
 
 #include <fstream>
 #include <iostream>
-#include "json/json.h"
+#include <json/json.h>
 
 #include "system.h"
 #include "iobject.h"
@@ -12,6 +12,7 @@
 class Scene
 {
     private:
+		Camera				_camera;
         std::string         _name;
         vector<IObject *>	_objects;
 
@@ -20,11 +21,13 @@ class Scene
 		void	addObjects(Json::Value objects);
 
     public:
-		Scene(std::string path); 
+		Scene(std::string path);
 		~Scene();
 
+		Camera*				camera();
 		std::string			name();
-		vector<IObject *>*	objects();
+		vector<IObject*>*	objects();
+
 		void				addObject(IObject *object);
 		IObject*			getObject(std::string name);
 };

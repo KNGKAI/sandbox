@@ -1,14 +1,71 @@
 #include "renderer.h"
 #include "sandbox.h"
-#include "filesystem.h"
 
 GLFWwindow *Renderer::_window = nullptr;
 
 vec3 Renderer::sun = vec3(-0.3, -0.4, 0.2);
 
-Shader Renderer::ourShader("shaders/fragment.shader", "shaders/vertex.shader");
+Shader Renderer::ourShader = Shader();
 
-Model Renderer::ourModel(FileSystem::getPath("mesh/cugbe.obj"));
+Shader Renderer::skybox = Shader();
+
+float skyboxVertices[] = {
+	-1.0f,  1.0f, -1.0f,
+	-1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+	 1.0f,  1.0f, -1.0f,
+	-1.0f,  1.0f, -1.0f,
+
+	-1.0f, -1.0f,  1.0f,
+	-1.0f, -1.0f, -1.0f,
+	-1.0f,  1.0f, -1.0f,
+	-1.0f,  1.0f, -1.0f,
+	-1.0f,  1.0f,  1.0f,
+	-1.0f, -1.0f,  1.0f,
+
+	 1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+
+	-1.0f, -1.0f,  1.0f,
+	-1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f, -1.0f,  1.0f,
+	-1.0f, -1.0f,  1.0f,
+
+	-1.0f,  1.0f, -1.0f,
+	 1.0f,  1.0f, -1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	-1.0f,  1.0f,  1.0f,
+	-1.0f,  1.0f, -1.0f,
+
+	-1.0f, -1.0f, -1.0f,
+	-1.0f, -1.0f,  1.0f,
+	 1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+	-1.0f, -1.0f,  1.0f,
+	 1.0f, -1.0f,  1.0f
+};
+
+vector<std::string> skyboxFaces = vector<std::string>
+{
+	FileSystem::getPath("assets/textures/skybox/right.jpg"),
+	FileSystem::getPath("assets/textures/skybox/left.jpg"),
+	FileSystem::getPath("assets/textures/skybox/top.jpg"),
+	FileSystem::getPath("assets/textures/skybox/bottom.jpg"),
+	FileSystem::getPath("assets/textures/skybox/front.jpg"),
+	FileSystem::getPath("assets/textures/skybox/back.jpg")
+};
+
+unsigned int		skyboxVAO = 0;
+unsigned int		skyboxVBO = 0;
+unsigned int		skyboxTextureID = 0;
 
 void Renderer::input()
 {
@@ -45,29 +102,78 @@ void Renderer::input()
 	if (glfwGetKey(Renderer::window(), GLFW_KEY_Z) == GLFW_PRESS) { Input::press(Key_Z); }
 }
 
-void Renderer::renderSceneObject(const IObject &object, const Shader &shader)
+void Renderer::renderSceneObject(IObject *object, Shader *shader)
 {
-	if (object.model.enabled)
+	if (object->model.enabled)
 	{
-		//
+		Camera* camera;
+		mat4 projection;
+		mat4 view;
+		mat4 model;
+
+		camera = Sandbox::scene()->camera();
+		projection = perspective(radians(camera->zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, camera->nearPlane, camera->farPlane);
+		view = camera->GetViewMatrix();
+		model = mat4(1.0f);
+		model = translate(model, object->transform.position);
+		model = rotate(model, radians(object->transform.rotation.x), vec3(1.0f, 0.0f, 0.0f));
+		model = rotate(model, radians(object->transform.rotation.y), vec3(0.0f, 1.0f, 0.0f));
+		model = rotate(model, radians(object->transform.rotation.z), vec3(0.0f, 0.0f, 1.0f));
+		model = scale(model, object->transform.scale);
+		shader->use();
+		shader->setMat4("projection", projection);
+		shader->setMat4("view", view);
+		shader->setMat4("model", model);
+		object->model.Draw(*shader);
 	}
 }
 
 void Renderer::renderSceneObjects()
 {
-	IObject *obj;
+	IObject* object;
 
-	for (auto i = Sandbox::scene()->objects()->begin(); i != Sandbox::scene()->objects()->begin(); i++)
+	ourShader.use();
+	ourShader.setVec3("light.direction", 1.0f, -1.0f, 1.0f);
+	ourShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+	ourShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+	ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+	ourShader.setInt("material.diffuse", 0);
+	ourShader.setInt("material.specular", 1);
+	ourShader.setFloat("material.shininess", 32.0f);
+	ourShader.setVec3("viewPos", Sandbox::scene()->camera()->transform.position);
+	for (auto i = Sandbox::scene()->objects()->begin(); i != Sandbox::scene()->objects()->end(); i++)
 	{
-		obj = *i;
+		object = (*i);
+		if (object->enabled) { Renderer::renderSceneObject(object, &ourShader); }
 	}
-	
+}
+
+void Renderer::renderSceneSkybox()
+{
+	Camera* camera;
+	mat4 model;
+	mat4 view;
+	mat4 projection;
+
+	camera = Sandbox::scene()->camera();
+	model = mat4(1.0f);
+	view = mat4(mat3(camera->GetViewMatrix()));
+	projection = perspective(radians(camera->zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, camera->nearPlane, camera->farPlane);
+	skybox.use();
+	skybox.setInt("skybox", 0);
+	skybox.setMat4("view", view);
+	skybox.setMat4("projection", projection);
+	GL(glBindVertexArray(skyboxVAO));
+	GL(glActiveTexture(GL_TEXTURE0));
+	GL(glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTextureID));
+	GL(glDrawArrays(GL_TRIANGLES, 0, 36));
+	GL(glBindVertexArray(0));
 }
 
 void Renderer::renderScene()
 {
-	//Renderer::ourModel.Draw(Renderer::ourShader);
-	//Renderer::renderSceneObjects();
+	Renderer::renderSceneSkybox();
+	Renderer::renderSceneObjects();
 }
 
 void Renderer::renderGUI()
@@ -75,73 +181,82 @@ void Renderer::renderGUI()
 	//
 }
 
-int Renderer::compileShader(const std::string &src, unsigned int type)
+void Renderer::initSkybox()
 {
-	unsigned int i = glCreateShader(type);
-	const char *s = src.c_str();
-	glShaderSource(i, 1, &s, nullptr);
-	glCompileShader(i);
-	return (i);
-}
+	int	width;
+	int	height;
+	int	nrChannels;
 
-unsigned int Renderer::createShader(const std::string &vertexShader, const std::string &fragShader)
-{
-	unsigned int program = glCreateProgram();
-	unsigned int vs = Renderer::compileShader(vertexShader, GL_VERTEX_SHADER);
-	unsigned int fs = Renderer::compileShader(fragShader, GL_FRAGMENT_SHADER);
-
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
-	glValidateProgram(program);
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-	return (program);
-}
-
-std::string Renderer::loadShader(const std::string path)
-{
-	std::ifstream file(path);
-	std::string shader;
-	std::string line;
-
-	shader = "";
-	while (std::getline(file, line)) { shader += line + "\n"; }
-	return (shader);
+	Renderer::skybox = Shader("assets/shaders/skybox.vs", "assets/shaders/skybox.fs");
+	GL(glGenVertexArrays(1, &skyboxVAO));
+	GL(glGenBuffers(1, &skyboxVBO));
+	GL(glBindVertexArray(skyboxVAO));
+	GL(glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO));
+	GL(glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW));
+	GL(glEnableVertexAttribArray(0));
+	GL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+	GL(glGenTextures(1, &skyboxTextureID));
+	GL(glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTextureID));
+	for (unsigned int i = 0; i < skyboxFaces.size(); i++)
+	{
+		unsigned char* data = stbi_load(skyboxFaces[i].c_str(), &width, &height, &nrChannels, 0);
+		if (data)
+		{
+			GL(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
+			stbi_image_free(data);
+		}
+		else
+		{
+			std::cout << "Cubemap texture failed to load at path: " << skyboxFaces[i] << std::endl;
+			stbi_image_free(data);
+		}
+	}
+	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
 }
 
 void Renderer::init()
 {
     if (!glfwInit())
     {
-        std::cout << "GLFW init error" << std::endl;
-        std::exit(EXIT_FAILURE);
+        cout << "GLFW init error" << endl;
+        exit(EXIT_FAILURE);
     }
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-    Renderer::_window = glfwCreateWindow(1280, 720, "Sandbox", NULL, NULL);
+    Renderer::_window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Sandbox", NULL, NULL);
     if (!Renderer::window())
     {
         Renderer::destroy();
-        std::cout << "GLFW window error" << std::endl;
-        std::exit(EXIT_FAILURE);
+        cout << "GLFW window error" << endl;
+        exit(EXIT_FAILURE);
     }
     glfwMakeContextCurrent(Renderer::window());
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cout << "GLAD error" << std::endl;
-        std::exit(0);
+        cout << "GLAD load error" << endl;
+        exit(EXIT_FAILURE);
     }
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	Renderer::initSkybox();
+	cout << "OpenGL v." << glGetString(GL_VERSION) << endl;
+
+	//DEBUG
+	Renderer::ourShader = Shader("assets/shaders/shader.vs", "assets/shaders/shader.fs");
 }
 
 void Renderer::render()
 {
-	if (glfwWindowShouldClose(Renderer::window())) { std::exit(0); }
-    glClear(GL_COLOR_BUFFER_BIT);
+	if (glfwWindowShouldClose(Renderer::window())) { exit(0); }
+    GL(glClear(GL_DEPTH_BUFFER_BIT););
     Renderer::input();
     Renderer::renderScene();
     Renderer::renderGUI();

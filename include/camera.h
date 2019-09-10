@@ -1,18 +1,20 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "icomponent.h"
+#include "system.h"
 #include "transform.h"
 
 class Camera
 {
-    public:
-        static bool enabled;
-		static Transform transform;
-		static vec3 surface;
-		static double fov;
-		static double nearPlane;
-		static double farPlane;
+public:
+	Camera();
+
+	Transform	transform;
+	float		nearPlane;
+	float		farPlane;
+	float		zoom;
+
+	mat4 GetViewMatrix();
 };
 
 #endif

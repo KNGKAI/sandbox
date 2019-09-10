@@ -1,35 +1,35 @@
 #include "input.h"
 
-vector<Key *> Input::_keys = vector<Key *>();
+List<Key *> Input::_keys = List<Key *>();
 
 void Input::press(EKeycode key)
 {
     Key *k;
 
-    for (auto i = Input::_keys.begin(); i != Input::_keys.end(); i++)
+    for (int i = 0; i < Input::keys()->length(); i++)
     {
-        k = *i;
+        k = Input::_keys.get(i);
         if (k->val == key)
         {
             if (k->state == Key_State_Up) { k->setState(Key_State_Hold); }
             return;
         }
     }
-    Input::_keys.push_back(new Key(key, Key_State_Down));
+    Input::_keys.add(new Key(key, Key_State_Down));
 }
 
 void Input::process()
 {
     Key *k;
     
-    for (auto i = Input::_keys.begin(); i != Input::_keys.end(); i++)
+    for (int i = Input::keys()->length() - 1; i >= 0; i--)
     {
-        k = *i;
+        k = Input::keys()->get(i);
         switch (k->state)
         {
         case Key_State_Down: k->setState(Key_State_Hold); break;
         case Key_State_Hold: k->setState(Key_State_Hold); break;
-        case Key_State_Up: Input::_keys.erase(i); break;
+        case Key_State_Up: Input::_keys.remove(i); break;
         default: break;
         }
     }
@@ -39,9 +39,9 @@ bool Input::getKey(EKeycode key, EKeycodeState state)
 {
     Key *k;
     
-    for (auto i = Input::_keys.begin(); i != Input::_keys.end(); i++)
+    for (int i = Input::keys()->length() - 1; i >= 0; i--)
     {
-        k = *i;
+        k = Input::keys()->get(i);
         if (k->val == key)
         {
             if (k->state == state)
@@ -53,4 +53,4 @@ bool Input::getKey(EKeycode key, EKeycodeState state)
     return (false);
 }
 
-vector<Key*> *Input::keys() { return (&Input::_keys); }
+List<Key*> *Input::keys() { return (&Input::_keys); }

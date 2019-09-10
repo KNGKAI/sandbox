@@ -1,30 +1,28 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
-
-#include "camera.h"
-#include "iobject.h"
+#include "filesystem.h"
+#include "gl.h"
 #include "scene.h"
+#include "vector.h"
+
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
 
 class Renderer
 {
     private:
-        static GLFWwindow*  _window;
+        static GLFWwindow* _window; 
+		static Shader ourShader;
+		static Shader skybox;
 
         static void     input();
-		static void		renderSceneObject(const IObject &object, const Shader &shader);
+		static void		renderSceneObject(IObject *object, Shader *shader);
 		static void		renderSceneObjects();
-        static void     renderScene();
+		static void     renderSceneSkybox();
+		static void     renderScene();
         static void     renderGUI();
-        static int          compileShader(const std::string &src, unsigned int type);
-        static unsigned int createShader(const std::string &vertexShader, const std::string &fragShader);
-        static std::string  loadShader(const std::string path);
-		
-		//test
-		static Shader ourShader;
-		static Model ourModel;
+		static void		initSkybox();
 
     public:
         static void     init();

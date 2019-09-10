@@ -1,13 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "model.h"
 
-
-Model::Model() { return; }
-
-Model::Model(string const &path, bool gamma) : gammaCorrection(gamma)
-{
-    loadModel(path);
-}
+Model::Model(bool gamma) : gammaCorrection(gamma) { return; }
 
 // draws the model, and thus all its meshes
 void Model::Draw(Shader shader)
@@ -48,9 +42,11 @@ void Model::processNode(aiNode *node, const aiScene *scene)
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
     for(unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        processNode(node->mChildren[i], scene);
+		if (node->mChildren[i])
+		{
+			processNode(node->mChildren[i], scene);
+		}
     }
-
 }
 
 Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
@@ -88,15 +84,21 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
         else
             vertex.TexCoords = glm::vec2(0.0f, 0.0f);
         // tangent
-        vector.x = mesh->mTangents[i].x;
-        vector.y = mesh->mTangents[i].y;
-        vector.z = mesh->mTangents[i].z;
-        vertex.Tangent = vector;
+		if (mesh->mTangents != nullptr)
+		{
+			vector.x = mesh->mTangents[i].x;
+			vector.y = mesh->mTangents[i].y;
+			vector.z = mesh->mTangents[i].z;
+			vertex.Tangent = vector;
+		}
         // bitangent
-        vector.x = mesh->mBitangents[i].x;
-        vector.y = mesh->mBitangents[i].y;
-        vector.z = mesh->mBitangents[i].z;
-        vertex.Bitangent = vector;
+		if (mesh->mBitangents != nullptr)
+		{
+			vector.x = mesh->mBitangents[i].x;
+			vector.y = mesh->mBitangents[i].y;
+			vector.z = mesh->mBitangents[i].z;
+			vertex.Bitangent = vector;
+		}
         vertices.push_back(vertex);
     }
     // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
@@ -173,13 +175,13 @@ unsigned int TextureFromFile(const char *path, const string &directory, bool gam
     filename = directory + '/' + filename;
 
     unsigned int textureID;
-    glGenTextures(1, &textureID);
+    GL(glGenTextures(1, &textureID));
 
     int width, height, nrComponents;
     unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
     if (data)
     {
-        GLenum format;
+        GLenum format = 0;
         if (nrComponents == 1)
             format = GL_RED;
         else if (nrComponents == 3)
@@ -187,14 +189,14 @@ unsigned int TextureFromFile(const char *path, const string &directory, bool gam
         else if (nrComponents == 4)
             format = GL_RGBA;
 
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
+        GL(glBindTexture(GL_TEXTURE_2D, textureID));
+        GL(glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data));
+        GL(glGenerateMipmap(GL_TEXTURE_2D));
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+        GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+        GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+        GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
         stbi_image_free(data);
     }
