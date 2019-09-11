@@ -53,15 +53,16 @@ float skyboxVertices[] = {
 	 1.0f, -1.0f,  1.0f
 };
 
-vector<std::string> skyboxFaces = vector<std::string>
-{
-	FileSystem::getPath("assets/textures/skybox/right.jpg"),
-	FileSystem::getPath("assets/textures/skybox/left.jpg"),
-	FileSystem::getPath("assets/textures/skybox/top.jpg"),
-	FileSystem::getPath("assets/textures/skybox/bottom.jpg"),
-	FileSystem::getPath("assets/textures/skybox/front.jpg"),
-	FileSystem::getPath("assets/textures/skybox/back.jpg")
+string facePaths[] = {
+FileSystem::getPath("assets/textures/skybox/right.jpg"),
+FileSystem::getPath("assets/textures/skybox/left.jpg"),
+FileSystem::getPath("assets/textures/skybox/top.jpg"),
+FileSystem::getPath("assets/textures/skybox/bottom.jpg"),
+FileSystem::getPath("assets/textures/skybox/front.jpg"),
+FileSystem::getPath("assets/textures/skybox/back.jpg")
 };
+
+vector<std::string> skyboxFaces(facePaths, facePaths + sizeof(facePaths) / sizeof(facePaths[0]));
 
 unsigned int		skyboxVAO = 0;
 unsigned int		skyboxVBO = 0;
@@ -134,7 +135,7 @@ void Renderer::renderSceneObjects()
 
 	ourShader.use();
 	ourShader.setVec3("light.direction", 1.0f, -1.0f, 1.0f);
-	ourShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+	ourShader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
 	ourShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 	ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 	ourShader.setInt("material.diffuse", 0);
@@ -244,8 +245,10 @@ void Renderer::init()
         cout << "GLAD load error" << endl;
         exit(EXIT_FAILURE);
     }
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
+	GL(glEnable(GL_DEPTH_TEST));
+	GL(glDepthMask(GL_TRUE));
+	GL(glDepthFunc(GL_LEQUAL));
+	GL(glDepthRange(0.0f, 1.0f));
 	Renderer::initSkybox();
 	cout << "OpenGL v." << glGetString(GL_VERSION) << endl;
 
@@ -256,7 +259,9 @@ void Renderer::init()
 void Renderer::render()
 {
 	if (glfwWindowShouldClose(Renderer::window())) { exit(0); }
-    GL(glClear(GL_DEPTH_BUFFER_BIT););
+	GL(glClearColor(0.0f, 0.0f, 0.0f, 0.0f));
+	GL(glClearDepth(1.0f));
+	GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     Renderer::input();
     Renderer::renderScene();
     Renderer::renderGUI();

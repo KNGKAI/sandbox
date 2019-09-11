@@ -19,11 +19,13 @@ public:
 private:
   static std::string const & getRoot()
   {
-	static std::string root = "C:/projects/sandbox/sandbox";
+	  static std::string root = "C:/projects/sandbox/sandbox";
+    #ifdef __APPLE__
+    root = "/goinfre/njordaan/Desktop/sandbox";
+    #endif
     return root;
   }
-
-  //static std::string(*foo (std::string const &)) getPathBuilder()
+  
   static Builder getPathBuilder()
   {
     if (getRoot() != "")
@@ -41,9 +43,6 @@ private:
   {
     return "../../../" + path;
   }
-
-
 };
 
-// FILESYSTEM_H
 #endif

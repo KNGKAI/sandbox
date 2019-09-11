@@ -3,14 +3,13 @@ NAME = sandbox
 TARGET_DIR = ./bin/
 TARGET = $(TARGET_DIR)$(NAME)
 
-
 COMPILER = clang++
 FLAGS = -w -Werror -Wextra -Wall -framework Opengl
 
 DEP_DIR = ~/.brew/Cellar
 
 ASSIMP_DEP = ./lib/assimp/lib/libassimp.4.0.1.dylib 
-GLAD_DEP = ./lib/glad/glad.o
+GLAD_DEP = ./lib/glad/src/glad.c
 GLFW_DEP = $(DEP_DIR)/glfw/3.3/lib/libglfw.3.3.dylib
 JSON_DEP = ./lib/json/jsoncpp.cpp
 OPENGL_DEP = -framework OpenGL

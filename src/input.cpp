@@ -28,7 +28,7 @@ void Input::process()
         switch (k->state)
         {
         case Key_State_Down: k->setState(Key_State_Hold); break;
-        case Key_State_Hold: k->setState(Key_State_Hold); break;
+        case Key_State_Hold: k->setState(Key_State_Up); break;
         case Key_State_Up: Input::_keys.remove(i); break;
         default: break;
         }

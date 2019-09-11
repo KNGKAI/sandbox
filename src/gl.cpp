@@ -6,7 +6,7 @@ void GLClearError()
 	while (glGetError() != GL_NO_ERROR);
 }
 
-bool GLLogError(const char* function, const char* file, int line)
+void GLLogError(const char* function, const char* file, int line)
 {
 	while (GLenum error = glGetError())
 	{
@@ -21,7 +21,5 @@ bool GLLogError(const char* function, const char* file, int line)
 			default: break;
 		}
 		std::cout << "OPENGL_ERR " << err << " " << function << ", line:" << line << std::endl;
-		return (false);
 	}
-	return (true);
 }
