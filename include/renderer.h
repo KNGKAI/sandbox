@@ -15,6 +15,7 @@ class Renderer
         static GLFWwindow* _window; 
 		static Shader ourShader;
 		static Shader skybox;
+        static Texture defaultTexture;
 
         static void     input();
 		static void		renderSceneObject(IObject *object, Shader *shader);
@@ -23,6 +24,7 @@ class Renderer
 		static void     renderScene();
         static void     renderGUI();
 		static void		initSkybox();
+		static void		initTexture();
 
     public:
         static void     init();

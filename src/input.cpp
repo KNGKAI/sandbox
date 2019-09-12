@@ -1,6 +1,11 @@
 #include "input.h"
+#include "renderer.h"
 
 List<Key *> Input::_keys = List<Key *>();
+
+vec2 Input::_mousePrev = vec2(0.0f);
+
+vec2 Input::_mouseOffset = vec2(0.0f);
 
 void Input::press(EKeycode key)
 {
@@ -21,6 +26,8 @@ void Input::press(EKeycode key)
 void Input::process()
 {
     Key *k;
+    double x;
+    double y;
     
     for (int i = Input::keys()->length() - 1; i >= 0; i--)
     {
@@ -33,6 +40,11 @@ void Input::process()
         default: break;
         }
     }
+    glfwGetCursorPos(Renderer::window(), &x, &y);
+    Input::_mouseOffset.x = x - Input::_mousePrev.x;
+    Input::_mouseOffset.y = Input::_mousePrev.y - y;
+    Input::_mousePrev.x = (float)x;
+    Input::_mousePrev.y = (float)y;
 }
 
 bool Input::getKey(EKeycode key, EKeycodeState state)
@@ -52,5 +64,9 @@ bool Input::getKey(EKeycode key, EKeycodeState state)
     }
     return (false);
 }
+
+float Input::getMouseX() { return (Input::_mouseOffset.x); }
+
+float Input::getMouseY() { return (Input::_mouseOffset.y); }
 
 List<Key*> *Input::keys() { return (&Input::_keys); }

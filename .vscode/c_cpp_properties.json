@@ -5,12 +5,13 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/**/*",
-                "${workspaceFolder}/include/*",
+                "${workspaceFolder}/include/**",
                 "${workspaceFolder}/lib/json/include/*",
                 "${workspaceFolder}/lib/glfw/include/*",
                 "${workspaceFolder}/lib/glad/include/*",
                 "${workspaceFolder}/lib/assimp/include/*",
-                "${workspaceFolder}/lib/glm/*"
+                "${workspaceFolder}/lib/glm/*",
+                "${workspaceFolder}/lib/stb/*"
             ],
             "defines": [],
             "macFrameworkPath": [

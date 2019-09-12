@@ -26,12 +26,12 @@ class Model : public IComponent
     public:
 		Model(bool gamma = false);
 
-        vector<Texture> textures_loaded;
-        vector<Mesh> meshes;
-        string directory;
-        bool gammaCorrection;
+    vector<Texture> textures_loaded;
+    vector<Mesh> meshes;
+    string directory;
+    bool gammaCorrection;
 
-        void Draw(Shader shader);
+    void Draw(Shader shader);
 		void loadModel(string const& path);
 };
 

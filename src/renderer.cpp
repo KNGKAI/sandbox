@@ -9,6 +9,8 @@ Shader Renderer::ourShader = Shader();
 
 Shader Renderer::skybox = Shader();
 
+Texture Renderer::defaultTexture = Texture();
+
 float skyboxVertices[] = {
 	-1.0f,  1.0f, -1.0f,
 	-1.0f, -1.0f, -1.0f,
@@ -219,6 +221,13 @@ void Renderer::initSkybox()
 	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
 }
 
+void Renderer::initTexture()
+{
+	// Renderer::defaultTexture.id = TextureFromFile(str.C_Str(), this->directory);
+	// Renderer::defaultTexture.type = "texture_diffuse";
+	// Renderer::defaultTexture.path = str.C_Str();
+}
+
 void Renderer::init()
 {
     if (!glfwInit())
@@ -250,6 +259,7 @@ void Renderer::init()
 	GL(glDepthFunc(GL_LEQUAL));
 	GL(glDepthRange(0.0f, 1.0f));
 	Renderer::initSkybox();
+	Renderer::initTexture();
 	cout << "OpenGL v." << glGetString(GL_VERSION) << endl;
 
 	//DEBUG

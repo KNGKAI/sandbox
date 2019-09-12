@@ -2,6 +2,7 @@
 #define INPUT_H
 
 #include "list.h"
+#include "vector.h"
 
 enum EKeycode
 {
@@ -61,10 +62,14 @@ class Input
 {
     private:
         static List<Key*>		_keys;
+		static vec2				_mousePrev;
+		static vec2				_mouseOffset;
     public:
         static void         	press(EKeycode key);
         static void         	process();
         static bool         	getKey(EKeycode key, EKeycodeState state);
+		static float			getMouseX();
+		static float			getMouseY();
         static List<Key*>*		keys();
 };
 

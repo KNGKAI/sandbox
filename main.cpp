@@ -1,7 +1,4 @@
-#include <iostream>
-
 #include "sandbox.h"
-#include "scene.h"
 
 Scene *scene;
 IObject* obj;
@@ -12,9 +9,9 @@ void Update()
 	float speed = 5;
 
 	obj->transform.rotation.y += Sandbox::deltaTime() * 30.0f;
-
-	if (Input::getKey(Key_Right, Key_State_Hold)) { scene->camera()->transform.rotation.y += 20 * Sandbox::deltaTime(); }
-	if (Input::getKey(Key_Left, Key_State_Hold)) { scene->camera()->transform.rotation.y -= 20 * Sandbox::deltaTime(); }
+	
+	scene->camera()->transform.rotation.y += Input::getMouseX() * 5;
+	scene->camera()->transform.rotation.x -= Input::getMouseY() * 5;
 
 	if (Input::getKey(Key_D, Key_State_Hold)) { move.x = 1; }
 	if (Input::getKey(Key_A, Key_State_Hold)) { move.x = -1; }

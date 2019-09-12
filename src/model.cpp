@@ -7,7 +7,9 @@ Model::Model(bool gamma) : gammaCorrection(gamma) { return; }
 void Model::Draw(Shader shader)
 {
     for(unsigned int i = 0; i < meshes.size(); i++)
+    {
         meshes[i].Draw(shader);
+    }
 }
 
 void Model::loadModel(string const &path)
@@ -82,7 +84,9 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
             vertex.TexCoords = vec;
         }
         else
+        {
             vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+        }
         // tangent
 		if (mesh->mTangents != nullptr)
 		{
@@ -140,6 +144,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName)
 {
     vector<Texture> textures;
+
     for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
     {
         aiString str;
@@ -165,29 +170,29 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
             textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
         }
     }
-    return textures;
+    return (textures);
 }
 
 
 unsigned int TextureFromFile(const char *path, const string &directory, bool gamma)
 {
-    string filename = string(path);
-    filename = directory + '/' + filename;
-
+    int width;
+    int height;
+    int nrComponents;
+    string filename;
     unsigned int textureID;
+    unsigned char *data;
+    
+    filename = string(path);
     GL(glGenTextures(1, &textureID));
-
-    int width, height, nrComponents;
-    unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+    filename = directory + '/' + filename;
+    data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
     if (data)
     {
         GLenum format = 0;
-        if (nrComponents == 1)
-            format = GL_RED;
-        else if (nrComponents == 3)
-            format = GL_RGB;
-        else if (nrComponents == 4)
-            format = GL_RGBA;
+        if (nrComponents == 1) { format = GL_RED; }
+        else if (nrComponents == 3) { format = GL_RGB; }
+        else if (nrComponents == 4) { format = GL_RGBA; }
 
         GL(glBindTexture(GL_TEXTURE_2D, textureID));
         GL(glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data));
@@ -206,5 +211,5 @@ unsigned int TextureFromFile(const char *path, const string &directory, bool gam
         stbi_image_free(data);
     }
 
-    return textureID;
+    return (textureID);
 }
