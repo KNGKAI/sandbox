@@ -3,19 +3,30 @@
 
 #include "ientity.h"
 
+enum eBombType
+{
+    DEFAULT
+};
+
 class Bomb : public IEntity
 {
     private:
-        int         _blastRadius;
-        int         _id;
+        unsigned int         _blastRadius;
+        unsigned int         _id;
+        eBombType            _bombType;
+        EntityType           _entityType;
 
     public:
-        Bomb(/* args */);
+        Bomb(eBombType type, unsigned int id);
         ~Bomb();
-
-        void    setBlastRadius();
-        int     getBlastRadius();
-        void    detonate();
+        
+        void                setID(unsigned int id);
+        unsigned int        getID() const;
+        void                setBlastRadius(unsigned int radius);
+        unsigned int        getBlastRadius() const;
+        void                detonate();
+        eBombType           getBombType() const;
+        virtual EntityType  getType();
 };
         
 #endif

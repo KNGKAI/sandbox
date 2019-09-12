@@ -25,7 +25,7 @@ class IEntity
         std::string     name() { return(_name); }
 
         virtual void            start() { return; }
-        virtual void            update() { return; }
+        virtual void            update()  { return; }
 
         virtual EntityType      getType() = 0;
 };

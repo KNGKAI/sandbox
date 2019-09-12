@@ -17,17 +17,16 @@ class Sandbox
 {
     private:
         static Scene*       _scene;
-
         static double       _deltaTime;
 		static bool         _running;
 		static bool         _pause;
 
     public:
-        static void     init();
-        static void     process(Scene *scene);
-        static void     destroy();
+        static void         init();
+        static void         process(Scene *scene);
+        static void         destroy();
 
-		static void		togglePause();
+		static void		    togglePause();
 
         static bool         running();
 		static bool			paused();

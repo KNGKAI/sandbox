@@ -28,6 +28,7 @@ class Mesh : public Component
 			public:
 				static Mesh loadMesh(std::string path);
 		};
+		
 		class Primitive
 		{
 			public:
