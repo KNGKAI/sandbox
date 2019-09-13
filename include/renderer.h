@@ -12,10 +12,11 @@
 class Renderer
 {
     private:
-        static GLFWwindow* _window; 
-		static Shader ourShader;
-		static Shader skybox;
-        static Texture defaultTexture;
+        static GLFWwindow*  _window; 
+        static Texture*     _defaultTexture;
+
+		static Shader       skybox;
+		static Shader       ourShader;
 
         static void     input();
 		static void		renderSceneObject(IObject *object, Shader *shader);
@@ -32,6 +33,7 @@ class Renderer
         static void     destroy();
 
         static GLFWwindow*  window();
+        static Texture*     defaultTexture();
 		static vec3		    sun;
 };
 

@@ -3,13 +3,13 @@
 
 GLFWwindow *Renderer::_window = nullptr;
 
-vec3 Renderer::sun = vec3(-0.3, -0.4, 0.2);
+Texture *Renderer::_defaultTexture = nullptr;
+
+vec3 Renderer::sun = vec3(-0.3, -0.5, 0.2);
 
 Shader Renderer::ourShader = Shader();
 
 Shader Renderer::skybox = Shader();
-
-Texture Renderer::defaultTexture = Texture();
 
 float skyboxVertices[] = {
 	-1.0f,  1.0f, -1.0f,
@@ -136,7 +136,7 @@ void Renderer::renderSceneObjects()
 	IObject* object;
 
 	ourShader.use();
-	ourShader.setVec3("light.direction", 1.0f, -1.0f, 1.0f);
+	ourShader.setVec3("light.direction", sun);
 	ourShader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
 	ourShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 	ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
@@ -223,9 +223,11 @@ void Renderer::initSkybox()
 
 void Renderer::initTexture()
 {
-	// Renderer::defaultTexture.id = TextureFromFile(str.C_Str(), this->directory);
-	// Renderer::defaultTexture.type = "texture_diffuse";
-	// Renderer::defaultTexture.path = str.C_Str();
+	const char* path = "assets/textures/default.png";
+	Renderer::_defaultTexture = new Texture();
+	Renderer::_defaultTexture->id = TextureFromFile(path, FileSystem::getRoot());
+	Renderer::_defaultTexture->type = "texture_diffuse";
+	Renderer::_defaultTexture->path = path;
 }
 
 void Renderer::init()
@@ -286,3 +288,5 @@ void Renderer::destroy()
 }
 
 GLFWwindow *Renderer::window() { return (Renderer::_window); }
+
+Texture *Renderer::defaultTexture() { return (Renderer::_defaultTexture); }

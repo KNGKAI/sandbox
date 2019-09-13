@@ -11,7 +11,7 @@
   "objects": [
     {
       "name": "cyborg",
-      "position": [ 0, 0, 7 ],
+      "position": [ -1, 0, 7 ],
       "rotation": [ 0, 0, 0 ],
       "scale": [ 0.2, 0.2, 0.2 ],
       "model": "assets/models/nanosuit/nanosuit.obj"
@@ -24,11 +24,25 @@
       "model": "assets/models/rock/rock.obj"
     },
     {
-      "name": "floor",
-      "position": [ 0, -0.5, 7 ],
+      "name": "sphere",
+      "position": [ 2, 1, 5 ],
       "rotation": [ 0, 0, 0 ],
-      "scale": [ 10, 1, 10 ],
-      "model": "assets/models/cube.obj"
+      "scale": [ 1, 1, 1 ],
+      "model": "assets/models/sphere/sphere.obj"
+    },
+    {
+      "name": "house",
+      "position": [ 7, 0, 3 ],
+      "rotation": [ 0, 0, 0 ],
+      "scale": [ 1, 1, 1 ],
+      "model": "assets/models/house/house.obj"
+    },
+    {
+      "name": "cube",
+      "position": [ 0, -0.5, 5 ],
+      "rotation": [ 0, 0, 0 ],
+      "scale": [ 20, 1, 20 ],
+      "model": "assets/models/cube/cube.obj"
     }
   ]
 }

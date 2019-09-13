@@ -31,7 +31,6 @@ void main()
   	
     // diffuse 
     vec3 norm = normalize(Normal);
-    // vec3 lightDir = normalize(light.position - FragPos);
     vec3 lightDir = normalize(-light.direction);  
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TexCoords).rgb;  
@@ -43,5 +42,13 @@ void main()
     vec3 specular = light.specular * spec * texture(material.specular, TexCoords).rgb;  
         
     vec3 result = ambient + diffuse + specular;
+    
+    //cel shading
+    // float intensity = diff * 0.6 + spec * 0.4;
+ 	// if (intensity > 0.9) { intensity = 1.1; }
+ 	// else if (intensity > 0.5) { intensity = 0.7; }
+ 	// else { intensity = 0.5; }
+    // FragColor = vec4(result * intensity, 1.0);
+    
     FragColor = vec4(result, 1.0);
 } 

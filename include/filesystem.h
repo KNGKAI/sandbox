@@ -15,8 +15,6 @@ public:
     static std::string(*pathBuilder)(std::string const &) = getPathBuilder();
     return (*pathBuilder)(path);
   }
-
-private:
   static std::string const & getRoot()
   {
 	  static std::string root = "C:/projects/sandbox/sandbox";
@@ -25,6 +23,8 @@ private:
     #endif
     return root;
   }
+
+private:
   
   static Builder getPathBuilder()
   {
