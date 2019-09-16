@@ -3,74 +3,7 @@
 
 GLFWwindow *Renderer::_window = nullptr;
 
-Texture *Renderer::_defaultTexture = nullptr;
-
-vec3 Renderer::sun = vec3(-0.3, -0.5, 0.2);
-
 Shader Renderer::ourShader = Shader();
-
-Shader Renderer::skybox = Shader();
-
-float skyboxVertices[] =
-{
-	-1.0f,  1.0f, -1.0f,
-	-1.0f, -1.0f, -1.0f,
-	 1.0f, -1.0f, -1.0f,
-	 1.0f, -1.0f, -1.0f,
-	 1.0f,  1.0f, -1.0f,
-	-1.0f,  1.0f, -1.0f,
-
-	-1.0f, -1.0f,  1.0f,
-	-1.0f, -1.0f, -1.0f,
-	-1.0f,  1.0f, -1.0f,
-	-1.0f,  1.0f, -1.0f,
-	-1.0f,  1.0f,  1.0f,
-	-1.0f, -1.0f,  1.0f,
-
-	 1.0f, -1.0f, -1.0f,
-	 1.0f, -1.0f,  1.0f,
-	 1.0f,  1.0f,  1.0f,
-	 1.0f,  1.0f,  1.0f,
-	 1.0f,  1.0f, -1.0f,
-	 1.0f, -1.0f, -1.0f,
-
-	-1.0f, -1.0f,  1.0f,
-	-1.0f,  1.0f,  1.0f,
-	 1.0f,  1.0f,  1.0f,
-	 1.0f,  1.0f,  1.0f,
-	 1.0f, -1.0f,  1.0f,
-	-1.0f, -1.0f,  1.0f,
-
-	-1.0f,  1.0f, -1.0f,
-	 1.0f,  1.0f, -1.0f,
-	 1.0f,  1.0f,  1.0f,
-	 1.0f,  1.0f,  1.0f,
-	-1.0f,  1.0f,  1.0f,
-	-1.0f,  1.0f, -1.0f,
-
-	-1.0f, -1.0f, -1.0f,
-	-1.0f, -1.0f,  1.0f,
-	 1.0f, -1.0f, -1.0f,
-	 1.0f, -1.0f, -1.0f,
-	-1.0f, -1.0f,  1.0f,
-	 1.0f, -1.0f,  1.0f
-};
-
-string facePaths[] =
-{
-FileSystem::getPath("assets/textures/skybox/right.jpg"),
-FileSystem::getPath("assets/textures/skybox/left.jpg"),
-FileSystem::getPath("assets/textures/skybox/top.jpg"),
-FileSystem::getPath("assets/textures/skybox/bottom.jpg"),
-FileSystem::getPath("assets/textures/skybox/front.jpg"),
-FileSystem::getPath("assets/textures/skybox/back.jpg")
-};
-
-vector<std::string> skyboxFaces(facePaths, facePaths + sizeof(facePaths) / sizeof(facePaths[0]));
-
-unsigned int		skyboxVAO = 0;
-unsigned int		skyboxVBO = 0;
-unsigned int		skyboxTextureID = 0;
 
 void Renderer::input()
 {
@@ -136,7 +69,9 @@ void Renderer::renderSceneObject(IObject *object, Shader *shader)
 void Renderer::renderSceneObjects()
 {
 	IObject* object;
+	vec3 sun;
 
+	sun = Sandbox::scene()->sun();
 	ourShader.use();
 	ourShader.setVec3("light.direction", sun);
 	ourShader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
@@ -153,31 +88,9 @@ void Renderer::renderSceneObjects()
 	}
 }
 
-void Renderer::renderSceneSkybox()
-{
-	Camera* camera;
-	mat4 model;
-	mat4 view;
-	mat4 projection;
-
-	camera = Sandbox::scene()->camera();
-	model = mat4(1.0f);
-	view = mat4(mat3(camera->GetViewMatrix()));
-	projection = perspective(radians(camera->zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, camera->nearPlane, camera->farPlane);
-	skybox.use();
-	skybox.setInt("skybox", 0);
-	skybox.setMat4("view", view);
-	skybox.setMat4("projection", projection);
-	GL(glBindVertexArray(skyboxVAO));
-	GL(glActiveTexture(GL_TEXTURE0));
-	GL(glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTextureID));
-	GL(glDrawArrays(GL_TRIANGLES, 0, 36));
-	GL(glBindVertexArray(0));
-}
-
 void Renderer::renderScene()
 {
-	Renderer::renderSceneSkybox();
+	Sandbox::scene()->skybox()->render();
 	Renderer::renderSceneObjects();
 }
 
@@ -186,48 +99,11 @@ void Renderer::renderGUI()
 	//
 }
 
-void Renderer::initSkybox()
-{
-	int	width;
-	int	height;
-	int	nrChannels;
-
-	Renderer::skybox = Shader("assets/shaders/skybox.vs", "assets/shaders/skybox.fs");
-	GL(glGenVertexArrays(1, &skyboxVAO));
-	GL(glGenBuffers(1, &skyboxVBO));
-	GL(glBindVertexArray(skyboxVAO));
-	GL(glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO));
-	GL(glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW));
-	GL(glEnableVertexAttribArray(0));
-	GL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
-	GL(glGenTextures(1, &skyboxTextureID));
-	GL(glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTextureID));
-	for (unsigned int i = 0; i < skyboxFaces.size(); i++)
-	{
-		unsigned char* data = stbi_load(skyboxFaces[i].c_str(), &width, &height, &nrChannels, 0);
-		if (data)
-		{
-			GL(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
-			stbi_image_free(data);
-		}
-		else
-		{
-			std::cout << "Cubemap texture failed to load at path: " << skyboxFaces[i] << std::endl;
-			stbi_image_free(data);
-		}
-	}
-	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
-}
-
 void Renderer::init()
 {
     if (!glfwInit())
     {
-        cout << "GLFW init error" << endl;
+		errorMessage("GLFW init");
         exit(EXIT_FAILURE);
     }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -240,22 +116,20 @@ void Renderer::init()
     if (!Renderer::window())
     {
         Renderer::destroy();
-        cout << "GLFW window error" << endl;
+		errorMessage("GLFW window");
         exit(EXIT_FAILURE);
     }
     glfwMakeContextCurrent(Renderer::window());
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        cout << "GLAD load error" << endl;
+		errorMessage("GLAD load");
         exit(EXIT_FAILURE);
     }
 	GL(glEnable(GL_DEPTH_TEST));
 	GL(glDepthMask(GL_TRUE));
 	GL(glDepthFunc(GL_LEQUAL));
 	GL(glDepthRange(0.0f, 1.0f));
-	Renderer::initSkybox();
-	Renderer::initTexture();
-	cout << "OpenGL v." << glGetString(GL_VERSION) << endl;
+	message("openGL loaded");
 
 	//DEBUG
 	Renderer::ourShader = Shader("assets/shaders/shader.vs", "assets/shaders/shader.fs");
@@ -281,5 +155,3 @@ void Renderer::destroy()
 }
 
 GLFWwindow *Renderer::window() { return (Renderer::_window); }
-
-Texture *Renderer::defaultTexture() { return (Renderer::_defaultTexture); }

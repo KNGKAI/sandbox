@@ -1,5 +1,5 @@
 #include "mesh.h"
-#include "renderer.h"
+#include "system.h"
 
 Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures) : vertices(vertices), indices(indices), textures(textures)
 {
@@ -32,28 +32,28 @@ void Mesh::Draw(Shader shader)
 	{
 		GL(glActiveTexture(GL_TEXTURE0 + count));
 		GL(glUniform1i(glGetUniformLocation(shader.ID, ((string)DIFFUSE_TEXTURE + "1").c_str()), count));
-		GL(glBindTexture(GL_TEXTURE_2D, Renderer::defaultTexture()->id));
+		GL(glBindTexture(GL_TEXTURE_2D, Texture::defaultTexture().id));
 		count++;
 	}
 	if (specularNr == 1)
 	{
 		GL(glActiveTexture(GL_TEXTURE0 + count));
 		GL(glUniform1i(glGetUniformLocation(shader.ID, ((string)SPECULAR_TEXTURE + "1").c_str()), count));
-		GL(glBindTexture(GL_TEXTURE_2D, Renderer::defaultTexture()->id));
+		GL(glBindTexture(GL_TEXTURE_2D, Texture::defaultTexture().id));
 		count++;
 	}
 	if (normalNr == 1)
 	{
 		GL(glActiveTexture(GL_TEXTURE0 + count));
 		GL(glUniform1i(glGetUniformLocation(shader.ID, ((string)NORMAL_TEXTURE + "1").c_str()), count));
-		GL(glBindTexture(GL_TEXTURE_2D, Renderer::defaultTexture()->id));
+		GL(glBindTexture(GL_TEXTURE_2D, Texture::defaultTexture().id));
 		count++;
 	}
 	if (heightNr == 1)
 	{
 		GL(glActiveTexture(GL_TEXTURE0 + count));
 		GL(glUniform1i(glGetUniformLocation(shader.ID, ((string)HEIGHT_TEXTURE + "1").c_str()), count));
-		GL(glBindTexture(GL_TEXTURE_2D, Renderer::defaultTexture()->id));
+		GL(glBindTexture(GL_TEXTURE_2D, Texture::defaultTexture().id));
 		count++;
 	}
 	GL(glBindVertexArray(VAO));

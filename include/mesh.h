@@ -2,7 +2,6 @@
 #define MESH_H
 
 #include "gl.h"
-#include "system.h"
 #include "shader.h"
 #include "texture.h"
 #include "vector.h"

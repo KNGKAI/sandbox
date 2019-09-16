@@ -13,6 +13,7 @@ void Sandbox::init()
     if (Sandbox::running()) { return; }
     Sandbox::_running = true;
     Renderer::init();
+    Texture::init();
 }
 
 void Sandbox::process(Scene *scene)

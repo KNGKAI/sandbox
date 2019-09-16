@@ -20,11 +20,8 @@ class Renderer
         static void     input();
 		static void		renderSceneObject(IObject *object, Shader *shader);
 		static void		renderSceneObjects();
-		static void     renderSceneSkybox();
 		static void     renderScene();
         static void     renderGUI();
-		static void		initSkybox();
-		static void		initTexture();
 
     public:
         static void     init();

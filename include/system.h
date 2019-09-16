@@ -13,8 +13,8 @@
 
 using namespace std;
 
-void message(string text) { cout << text << endl; }
+void message(string text);
 
-void errorMessage(string text) { message("error: " + text); }
+void errorMessage(string text);
 
 #endif

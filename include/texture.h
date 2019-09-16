@@ -1,8 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <stb_image.h>
-
+#include "gl.h"
 #include "system.h"
 
 #define DIFFUSE_TEXTURE "texture_diffuse"
@@ -17,7 +16,6 @@ class Texture
         static Texture			_defaultTexture;
 
 		static unsigned int fromFile(string path);
-		static GLenum		getFormat(int comp);
 	public:
 		Texture();
 		Texture(string path, string type);
@@ -27,9 +25,13 @@ class Texture
 		string			type;
 		string			path;
 		
-		static void		init();
-		static Texture	load(string path, string type);
-		static Texture	defaultTexture();
+		static void				init();
+		static Texture			load(string path, string type);
+		static Texture			defaultTexture();
+		
+		static GLenum			getFormat(int comp);
+		static unsigned char*	getData(const char *filename, int *x, int *y, int *comp, int compReq);
+		static void				freeData(unsigned char *data);
 };
 
 #endif

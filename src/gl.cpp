@@ -1,5 +1,5 @@
-#include <iostream>
 #include "gl.h"
+#include "system.h"
 
 void GLClearError()
 {
@@ -20,6 +20,6 @@ void GLLogError(const char* function, const char* file, int line)
 			case GL_OUT_OF_MEMORY: err = "GL_OUT_OF_MEMORY"; break;
 			default: break;
 		}
-		std::cout << "OPENGL_ERR " << err << " " << function << ", line:" << line << std::endl;
+		errorMessage("opengl " + err + " " + function + ", line:" + to_string(line));
 	}
 }

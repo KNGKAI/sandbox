@@ -1,20 +1,25 @@
 #include "scene.h"
 
-Scene::Scene(std::string path)
+Scene::Scene(std::string path) : _sun(-0.3, -0.5, 0.2)
 {
 	std::ifstream   ifs(path);
 	Json::Reader    reader;
 	Json::Value     file;
 	Json::Value     objects;
 
-	std::cout << "opening " << path << std::endl;
+	message("opening scene: " + path);
 	reader.parse(ifs, file);
-	this->setName(file["name"].empty() ? "scene" : file["name"].asString());
+	this->_skybox = Skybox();
+	this->setName(file["name"].empty() ? "undefined" : file["name"].asString());
 	if (!file["camera"].empty()) { this->setCamera(file["camera"]); }
 	if (!file["objects"].empty()) { this->addObjects(file["objects"]); }
 }
 
-void Scene::setName(Json::Value name) { this->_name = name.asString(); }
+void Scene::setName(Json::Value name)
+{
+	this->_name = name.asString();
+	message("scene name set: " + name.asString());
+}
 
 void Scene::addObjects(Json::Value objects)
 {
@@ -49,20 +54,25 @@ void Scene::setCamera(Json::Value camera)
 	this->_camera.nearPlane = camera["nearPlane"].asFloat();
 	this->_camera.farPlane = camera["farPlane"].asFloat();
 	this->_camera.zoom = camera["zoom"].asFloat();
+	message("scene camera enabled");
 }
 
 Scene::~Scene() { return; }
+
+Camera* Scene::camera() { return (&this->_camera); }
 
 std::string Scene::name() { return (this->_name); }
 
 vector<IObject *> *Scene::objects() { return (&this->_objects); }
 
-Camera* Scene::camera() { return (&this->_camera); }
+Skybox* Scene::skybox() { return (&this->_skybox); }
+
+vec3 Scene::sun() { return (this->_sun); }
 
 void Scene::addObject(IObject *object)
 {
 	this->_objects.push_back(object);
-	std::cout << object->name << " was added to scene: " << this->_name << std::endl;
+	message(object->name + ", was added to scene: " + this->_name);
 }
 
 IObject *Scene::getObject(std::string name)
