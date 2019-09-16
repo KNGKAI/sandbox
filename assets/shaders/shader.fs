@@ -45,9 +45,16 @@ void main()
     
     //cel shading
     // float intensity = diff * 0.6 + spec * 0.4;
- 	// if (intensity > 0.9) { intensity = 1.1; }
- 	// else if (intensity > 0.5) { intensity = 0.7; }
- 	// else { intensity = 0.5; }
+    // int cuts = 10;
+    // for(int i = 0; i <= cuts; i++)
+    // {
+    //     float a = float(i) / float(cuts);
+    //     if (intensity < a)
+    //     {
+    //         intensity = a;
+    //         break;
+    //     }
+    // }
     // FragColor = vec4(result * intensity, 1.0);
     
     FragColor = vec4(result, 1.0);

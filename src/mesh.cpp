@@ -21,38 +21,38 @@ void Mesh::Draw(Shader shader)
 		
 		count++;
 		GL(glActiveTexture(GL_TEXTURE0 + i));
-		if (name == "texture_diffuse") { number = std::to_string(diffuseNr++); }
-		else if (name == "texture_specular") { number = std::to_string(specularNr++); }
-		else if (name == "texture_normal") { number = std::to_string(normalNr++); }
-		else if (name == "texture_height") { number = std::to_string(heightNr++); }
+		if (name == DIFFUSE_TEXTURE) { number = std::to_string(diffuseNr++); }
+		else if (name == SPECULAR_TEXTURE) { number = std::to_string(specularNr++); }
+		else if (name == NORMAL_TEXTURE) { number = std::to_string(normalNr++); }
+		else if (name == HEIGHT_TEXTURE) { number = std::to_string(heightNr++); }
 		GL(glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i));
 		GL(glBindTexture(GL_TEXTURE_2D, textures[i].id));
 	}
 	if (diffuseNr == 1)
 	{
 		GL(glActiveTexture(GL_TEXTURE0 + count));
-		GL(glUniform1i(glGetUniformLocation(shader.ID, "texture_diffuse1"), count));
+		GL(glUniform1i(glGetUniformLocation(shader.ID, ((string)DIFFUSE_TEXTURE + "1").c_str()), count));
 		GL(glBindTexture(GL_TEXTURE_2D, Renderer::defaultTexture()->id));
 		count++;
 	}
 	if (specularNr == 1)
 	{
 		GL(glActiveTexture(GL_TEXTURE0 + count));
-		GL(glUniform1i(glGetUniformLocation(shader.ID, "texture_specular1"), count));
+		GL(glUniform1i(glGetUniformLocation(shader.ID, ((string)SPECULAR_TEXTURE + "1").c_str()), count));
 		GL(glBindTexture(GL_TEXTURE_2D, Renderer::defaultTexture()->id));
 		count++;
 	}
 	if (normalNr == 1)
 	{
 		GL(glActiveTexture(GL_TEXTURE0 + count));
-		GL(glUniform1i(glGetUniformLocation(shader.ID, "texture_normal1"), count));
+		GL(glUniform1i(glGetUniformLocation(shader.ID, ((string)NORMAL_TEXTURE + "1").c_str()), count));
 		GL(glBindTexture(GL_TEXTURE_2D, Renderer::defaultTexture()->id));
 		count++;
 	}
 	if (heightNr == 1)
 	{
 		GL(glActiveTexture(GL_TEXTURE0 + count));
-		GL(glUniform1i(glGetUniformLocation(shader.ID, "texture_height1"), count));
+		GL(glUniform1i(glGetUniformLocation(shader.ID, ((string)HEIGHT_TEXTURE + "1").c_str()), count));
 		GL(glBindTexture(GL_TEXTURE_2D, Renderer::defaultTexture()->id));
 		count++;
 	}

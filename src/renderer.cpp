@@ -11,7 +11,8 @@ Shader Renderer::ourShader = Shader();
 
 Shader Renderer::skybox = Shader();
 
-float skyboxVertices[] = {
+float skyboxVertices[] =
+{
 	-1.0f,  1.0f, -1.0f,
 	-1.0f, -1.0f, -1.0f,
 	 1.0f, -1.0f, -1.0f,
@@ -55,7 +56,8 @@ float skyboxVertices[] = {
 	 1.0f, -1.0f,  1.0f
 };
 
-string facePaths[] = {
+string facePaths[] =
+{
 FileSystem::getPath("assets/textures/skybox/right.jpg"),
 FileSystem::getPath("assets/textures/skybox/left.jpg"),
 FileSystem::getPath("assets/textures/skybox/top.jpg"),
@@ -219,15 +221,6 @@ void Renderer::initSkybox()
 	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
 	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 	GL(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
-}
-
-void Renderer::initTexture()
-{
-	const char* path = "assets/textures/default.png";
-	Renderer::_defaultTexture = new Texture();
-	Renderer::_defaultTexture->id = TextureFromFile(path, FileSystem::getRoot());
-	Renderer::_defaultTexture->type = "texture_diffuse";
-	Renderer::_defaultTexture->path = path;
 }
 
 void Renderer::init()

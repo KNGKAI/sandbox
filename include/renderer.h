@@ -13,7 +13,6 @@ class Renderer
 {
     private:
         static GLFWwindow*  _window; 
-        static Texture*     _defaultTexture;
 
 		static Shader       skybox;
 		static Shader       ourShader;
