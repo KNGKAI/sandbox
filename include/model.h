@@ -14,18 +14,22 @@
 class Model : public IComponent
 {
 	private:
-		void processNode(aiNode* node, const aiScene* scene);
-		Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-		vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
+		void processNode(aiNode *node, const aiScene *scene);
+		Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+		vector<Vertex>			loadVertices(aiMesh *mesh);
+    	vector<unsigned int>	loadTriangles(aiMesh *mesh);
+		vector<Texture>			loadTextures(aiMesh *mesh, const aiScene *scene);
+		vector<Texture> 		loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName);
+    	vector<Bone>			loadBones(aiMesh *mesh);
 
     public:
 		Model();
 
-    vector<Mesh> meshes;
-    string directory;
-    bool gammaCorrection;
+		vector<Mesh> meshes;
+		string directory;
+		bool gammaCorrection;
 
-    void Draw(Shader shader);
+		void Draw(Shader shader);
 		void loadModel(string const& path);
 };
 

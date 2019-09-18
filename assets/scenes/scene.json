@@ -31,11 +31,11 @@
       "model": "assets/models/sphere/sphere.obj"
     },
     {
-      "name": "house",
-      "position": [ 7, 0, 3 ],
-      "rotation": [ 0, 0, 0 ],
+      "name": "frog",
+      "position": [ 7, 2, 3 ],
+      "rotation": [ 0, -135, 0 ],
       "scale": [ 1, 1, 1 ],
-      "model": "assets/models/frog/FrogCharacter.obj"
+      "model": "assets/models/frog/FrogCharacter.dae"
     },
     {
       "name": "cube",

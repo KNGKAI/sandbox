@@ -9,6 +9,7 @@ Texture::Texture() : id(0), path("undefined"), type("undefined") { }
 
 Texture::Texture(string path, string type) : id(Texture::fromFile(path)), path(path), type(type)
 {
+    if (this->id == 0) { return; }
     message("texture loaded: " + path + ", type: " + type);
     Texture::_loadedTexture.add(*this);
 }
@@ -49,6 +50,7 @@ unsigned int Texture::fromFile(string path)
     {
         errorMessage("texture failed to load at path: " + path);
         Texture::freeData(data);
+        return (0);
     }
     return (textureID);
 }
