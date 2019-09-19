@@ -31,10 +31,10 @@ unsigned int Bomb::getBlastRadius() const
     return (_blastRadius);
 }
 
-void Bomb::detonate()
-{
-    return;
-}
+// void Bomb::detonate()
+// {
+//     return;
+// }
 
 EntityType Bomb::getType()
 {

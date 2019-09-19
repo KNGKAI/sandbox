@@ -40,7 +40,32 @@ eCharacterType Character::getCharacterType() const
     return (_type);
 }
 
+void Character::moveUp(unsigned int units)
+{
+    this->transform.position.y += units;
+}
+
+void Character::moveDown(unsigned int units)
+{
+    this->transform.position.y -= units;
+}
+
+void Character::moveLeft(unsigned int units)
+{
+    this->transform.position.x += units;
+}
+
+void Character::moveRight(unsigned int units)
+{
+    this->transform.position.x -= units;
+}
+
 EntityType Character::getType()
 {
     return (_entityType);
+}
+
+unsigned int Character::getID() const
+{
+    return (this->_id);
 }

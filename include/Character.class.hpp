@@ -12,7 +12,7 @@
     class Character : public IEntity
     {
         private:
-            int                 _id;
+            unsigned int		_id;
             eCharacterType      _type;
             EntityType          _entityType;
 
@@ -29,8 +29,12 @@
 
             void                setPosition(Vector3 position);
             Vector3             getPostion() const;
-
+            
+            void                moveUp(unsigned int units);
+            void                moveDown(unsigned int units);
+            void                moveRight(unsigned int units);
+            void                moveLeft(unsigned int units);
             eCharacterType      getCharacterType() const;
-
+			unsigned int 		getID() const;
     };
 #endif

@@ -24,7 +24,7 @@ class Bomb : public IEntity
         unsigned int        getID() const;
         void                setBlastRadius(unsigned int radius);
         unsigned int        getBlastRadius() const;
-        void                detonate();
+        // void                detonate();
         eBombType           getBombType() const;
         virtual EntityType  getType();
 };
