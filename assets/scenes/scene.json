@@ -2,19 +2,19 @@
 	"name": "test scene",
 	"gravity": -9.8,
   "camera": {
-    "position": [ 0, 4, 0 ],
-    "rotation": [ -20, 0, 0 ],
+    "position": [ -10, 4, -10 ],
+    "rotation": [ 0, 0, 0 ],
     "nearPlane": 0.1,
     "farPlane": 1000,
     "zoom": 45
   },
   "objects": [
     {
-      "name": "cyborg",
+      "name": "house",
       "position": [ -1, 0, 7 ],
       "rotation": [ 0, 0, 0 ],
-      "scale": [ 0.2, 0.2, 0.2 ],
-      "model": "assets/models/nanosuit/nanosuit.obj"
+      "scale": [ 1, 1, 1 ],
+      "model": "assets/models/cottage/cottage_obj.obj"
     },
     {
       "name": "rock",
@@ -41,7 +41,7 @@
       "name": "cube",
       "position": [ 0, -0.5, 5 ],
       "rotation": [ 0, 0, 0 ],
-      "scale": [ 20, 1, 20 ],
+      "scale": [ 1000, 1, 1000 ],
       "model": "assets/models/cube/cube.obj"
     }
   ]

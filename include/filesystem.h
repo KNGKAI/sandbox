@@ -17,7 +17,7 @@ public:
   }
   static std::string const & getRoot()
   {
-	  static std::string root = "C:/projects/sandbox/sandbox";
+	  static std::string root = "C:/projects/sandbox";
     #ifdef __APPLE__
     root = "/goinfre/njordaan/Desktop/sandbox";
     #endif

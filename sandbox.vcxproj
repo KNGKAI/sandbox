@@ -32,6 +32,9 @@
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\gl.cpp" />
     <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\skybox.cpp" />
+    <ClCompile Include="src\system.cpp" />
+    <ClCompile Include="src\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\camera.h" />
@@ -50,11 +53,13 @@
     <ClInclude Include="include\sandbox.h" />
     <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\shader.h" />
+    <ClInclude Include="include\skybox.h" />
     <ClInclude Include="include\system.h" />
     <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\transform.h" />
     <ClInclude Include="include\vector.h" />
     <ClInclude Include="include\vertex.h" />
+    <ClInclude Include="lib\glad\include\glad\glad.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\shader.fs" />
@@ -141,13 +146,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)sandbox\include; $(SolutionDir)sandbox\lib\assimp\include; $(SolutionDir)sandbox\lib\glad\include;$(SolutionDir)sandbox\lib\glfw\include; $(SolutionDir)sandbox\lib\glm;$(SolutionDir)sandbox\lib\json\include;$(SolutionDir)sandbox\lib\stb</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)lib\assimp\include;$(SolutionDir)lib\glad\include;$(SolutionDir)lib\glfw\include;$(SolutionDir)lib\glm;$(SolutionDir)lib\json\include;$(SolutionDir)lib\stb</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glfw3.lib;assimp-vc140-mt.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)sandbox\lib\glfw\lib; $(SolutionDir)sandbox\lib\assimp\lib\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\glfw\lib\;$(SolutionDir)lib\assimp\lib\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -159,12 +164,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)sandbox\include; $(SolutionDir)sandbox\lib\assimp\include; $(SolutionDir)sandbox\lib\glad\include;$(SolutionDir)sandbox\lib\glfw\include; $(SolutionDir)sandbox\lib\glm;$(SolutionDir)sandbox\lib\json\include;$(SolutionDir)sandbox\lib\stb</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)lib\assimp\include;$(SolutionDir)lib\glad\include;$(SolutionDir)lib\glfw\include;$(SolutionDir)lib\glm;$(SolutionDir)lib\json\include;$(SolutionDir)lib\stb</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)sandbox\lib\glfw\lib; $(SolutionDir)sandbox\lib\assimp\lib\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\glfw\lib\;$(SolutionDir)lib\assimp\lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glfw3.lib;assimp-vc140-mt.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

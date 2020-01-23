@@ -8,7 +8,7 @@ void Update()
 	vec3 move(0.0f);
 	float speed = 5;
 
-	obj->transform.rotation.y += Sandbox::deltaTime() * 30.0f;
+	//obj->transform.rotation.y += Sandbox::deltaTime() * 30.0f;
 	
 	scene->camera()->transform.rotation.y += Input::getMouseX() * 5;
 	scene->camera()->transform.rotation.x -= Input::getMouseY() * 5;
