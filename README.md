@@ -1,3 +1,3 @@
 # sandbox
 
-![screenshot](/assets/screenshot/1.png)
+![screenshot](/KNGKAI/sandbox/tree/master/assets/screenshots/1.png)
