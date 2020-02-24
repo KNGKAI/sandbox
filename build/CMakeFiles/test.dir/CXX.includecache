@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../openal/include/audio/Audio.hpp
+cstddef
+-
+al.h
+../openal/include/audio/al.h
+alc.h
+../openal/include/audio/alc.h
+string
+-
+glm/glm.hpp
+../openal/include/audio/glm/glm.hpp
+
+C:/Program Files (x86)/OpenAL 1.1 SDK/include/al.h
+
+C:/Program Files (x86)/OpenAL 1.1 SDK/include/alc.h
+
+C:/Users/Honin/Documents/Code/personal_projects/openal/main.cpp
+audio/Audio.hpp
+C:/Users/Honin/Documents/Code/personal_projects/openal/audio/Audio.hpp
+
