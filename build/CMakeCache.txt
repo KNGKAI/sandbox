@@ -230,6 +230,9 @@ JAM_OPENAL_BINARY_DIR:STATIC=C:/Users/Honin/Documents/Code/personal_projects/ope
 //Value Computed by CMake
 JAM_OPENAL_SOURCE_DIR:STATIC=C:/Users/Honin/Documents/Code/personal_projects/openal
 
+//Dependencies for the target
+jamal_LIB_DEPENDS:STATIC=general;C:\Program Files (x86)\OpenAL 1.1 SDK\libs\Win64\OpenAL32.lib;
+
 
 ########################
 # INTERNAL cache entries

@@ -41,11 +41,14 @@ namespace JAM::Audio{
 		JAMABuffer *buffer;
 		JAMASource *source;
 		bool load();
-		void play(bool async = false);
+		void play();
 		void stop();
+
+		~JAMASound();
 	};
 
 	bool initOpenAL();
+	bool deinitOpenAL();
 	JAMASound& genSound(std::string file);
 
 }

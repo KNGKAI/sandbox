@@ -1,0 +1,2 @@
+C:/msys64/mingw64/bin/ar.exe qc libjamal.a  CMakeFiles/jamal.dir/openal/src/Audio.cpp.obj CMakeFiles/jamal.dir/openal/src/wavloader.cpp.obj
+C:/msys64/mingw64/bin/ranlib.exe libjamal.a

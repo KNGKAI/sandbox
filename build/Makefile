@@ -123,6 +123,19 @@ test/fast:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
 .PHONY : test/fast
 
+#=============================================================================
+# Target rules for targets named jamal
+
+# Build rule for target.
+jamal: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 jamal
+.PHONY : jamal
+
+# fast build rule for target.
+jamal/fast:
+	$(MAKE) -f CMakeFiles/jamal.dir/build.make CMakeFiles/jamal.dir/build
+.PHONY : jamal/fast
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -157,6 +170,7 @@ openal/src/Audio.obj: openal/src/Audio.cpp.obj
 # target to build an object file
 openal/src/Audio.cpp.obj:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/openal/src/Audio.cpp.obj
+	$(MAKE) -f CMakeFiles/jamal.dir/build.make CMakeFiles/jamal.dir/openal/src/Audio.cpp.obj
 .PHONY : openal/src/Audio.cpp.obj
 
 openal/src/Audio.i: openal/src/Audio.cpp.i
@@ -166,6 +180,7 @@ openal/src/Audio.i: openal/src/Audio.cpp.i
 # target to preprocess a source file
 openal/src/Audio.cpp.i:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/openal/src/Audio.cpp.i
+	$(MAKE) -f CMakeFiles/jamal.dir/build.make CMakeFiles/jamal.dir/openal/src/Audio.cpp.i
 .PHONY : openal/src/Audio.cpp.i
 
 openal/src/Audio.s: openal/src/Audio.cpp.s
@@ -175,6 +190,7 @@ openal/src/Audio.s: openal/src/Audio.cpp.s
 # target to generate assembly for a file
 openal/src/Audio.cpp.s:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/openal/src/Audio.cpp.s
+	$(MAKE) -f CMakeFiles/jamal.dir/build.make CMakeFiles/jamal.dir/openal/src/Audio.cpp.s
 .PHONY : openal/src/Audio.cpp.s
 
 openal/src/wavloader.obj: openal/src/wavloader.cpp.obj
@@ -184,6 +200,7 @@ openal/src/wavloader.obj: openal/src/wavloader.cpp.obj
 # target to build an object file
 openal/src/wavloader.cpp.obj:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/openal/src/wavloader.cpp.obj
+	$(MAKE) -f CMakeFiles/jamal.dir/build.make CMakeFiles/jamal.dir/openal/src/wavloader.cpp.obj
 .PHONY : openal/src/wavloader.cpp.obj
 
 openal/src/wavloader.i: openal/src/wavloader.cpp.i
@@ -193,6 +210,7 @@ openal/src/wavloader.i: openal/src/wavloader.cpp.i
 # target to preprocess a source file
 openal/src/wavloader.cpp.i:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/openal/src/wavloader.cpp.i
+	$(MAKE) -f CMakeFiles/jamal.dir/build.make CMakeFiles/jamal.dir/openal/src/wavloader.cpp.i
 .PHONY : openal/src/wavloader.cpp.i
 
 openal/src/wavloader.s: openal/src/wavloader.cpp.s
@@ -202,6 +220,7 @@ openal/src/wavloader.s: openal/src/wavloader.cpp.s
 # target to generate assembly for a file
 openal/src/wavloader.cpp.s:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/openal/src/wavloader.cpp.s
+	$(MAKE) -f CMakeFiles/jamal.dir/build.make CMakeFiles/jamal.dir/openal/src/wavloader.cpp.s
 .PHONY : openal/src/wavloader.cpp.s
 
 # Help Target
@@ -212,6 +231,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... jamal"
 	@echo "... edit_cache"
 	@echo "... main.obj"
 	@echo "... main.i"

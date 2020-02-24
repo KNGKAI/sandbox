@@ -3,7 +3,7 @@
 #include <vector>
 
 namespace JAM::Audio{
-	ALCdevice* AudioDevice = NULL;
+	ALCdevice  *AudioDevice = NULL;
 	ALCcontext *AudioContext = NULL;
 
 	std::vector<JAMASound *> sounds;
@@ -40,6 +40,13 @@ namespace JAM::Audio{
 		return true;
 	}
 
+	bool deinitOpenAL(){
+		for(std::vector<JAMASound *>::iterator i = sounds.begin(); i != sounds.end(); i++){
+			delete (*i);
+		}
+		return true;
+	}
+
 	unsigned int gen(generator e){
 		unsigned int r;
 		e(1, &r);
@@ -71,9 +78,8 @@ namespace JAM::Audio{
 		source->bindBuffer(*buffer);
 		return true;
 	}
-	void JAMASound::play(bool async){
+	void JAMASound::play(){
 		alSourcePlay(source->name);
-		if(!async) return;
 		ALenum source_state;
 		alGetSourcei(*source, AL_SOURCE_STATE, &source_state);
 		// check for errors
@@ -129,5 +135,10 @@ namespace JAM::Audio{
 
 	void JAMASource::bindBuffer(JAMABuffer &e){
 		alSourcei(name, AL_BUFFER, e.name);
+	}
+
+	JAMASound::~JAMASound(){
+		alDeleteBuffers(1, &(buffer->name));
+		alDeleteSources(1, &(source->name));
 	}
 }
